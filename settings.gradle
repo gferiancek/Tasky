@@ -14,3 +14,12 @@ dependencyResolutionManagement {
 }
 rootProject.name = "Tasky"
 include ':app'
+include ':core'
+include ':feat-agenda'
+include ':feat-agenda:agenda-data'
+include ':feat-agenda:agenda-domain'
+include ':feat-agenda:agenda-presentation'
+include ':feat-login'
+include ':feat-login:login-data'
+include ':feat-login:login-domain'
+include ':feat-login:login-presentation'

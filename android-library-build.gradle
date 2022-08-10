@@ -1,0 +1,68 @@
+// build.gradle file that will be inherited by all Android Libraries (Anything that deals with UI)
+
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
+
+android {
+    compileSdkVersion ProjectConfig.compileSdk
+
+    defaultConfig {
+        minSdkVersion ProjectConfig.minSdk
+        targetSdkVersion ProjectConfig.targetSdk
+        versionCode ProjectConfig.versionCode
+        versionName ProjectConfig.versionName
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+    buildFeatures {
+        compose true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion Compose.composeVersion
+    }
+    packagingOptions {
+        exclude("META-INF/AL2.0")
+        exclude("META-INF/LGPL2.1")
+    }
+}
+
+dependencies{
+    // Android X
+    implementation AndroidX.appCompat
+    implementation AndroidX.coreKtx
+    implementation AndroidX.lifecycleRuntime
+
+    // Compose
+    implementation Compose.activityCompose
+    implementation Compose.ui
+    implementation Compose.material
+    implementation Compose.tooling
+    implementation Compose.navigation
+
+    // Hilt
+    implementation Hilt.android
+    kapt Hilt.compiler
+
+    // Testing
+    androidTestImplementation AndroidXTest.runner
+    androidTestImplementation ComposeTest.uiTest
+    androidTestImplementation HiltTest.hiltAndroidTesting
+    androidTestImplementation Junit.junitAndroidExt
+    debugImplementation ComposeTest.uiTestManifest
+    kaptAndroidTest Hilt.compiler
+    testImplementation Junit.junit4
+}
