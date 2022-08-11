@@ -11,16 +11,6 @@
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/app" />
-            <option value="$PROJECT_DIR$/buildSrc" />
-            <option value="$PROJECT_DIR$/core" />
-            <option value="$PROJECT_DIR$/feat-agenda" />
-            <option value="$PROJECT_DIR$/feat-agenda/agenda-data" />
-            <option value="$PROJECT_DIR$/feat-agenda/agenda-domain" />
-            <option value="$PROJECT_DIR$/feat-agenda/agenda-presentation" />
-            <option value="$PROJECT_DIR$/feat-login" />
-            <option value="$PROJECT_DIR$/feat-login/login-data" />
-            <option value="$PROJECT_DIR$/feat-login/login-domain" />
-            <option value="$PROJECT_DIR$/feat-login/login-presentation" />
           </set>
         </option>
       </GradleProjectSettings>
