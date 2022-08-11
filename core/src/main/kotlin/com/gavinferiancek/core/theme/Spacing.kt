@@ -1,4 +1,4 @@
-package com.gavinferiancek.tasky.ui.theme
+package com.gavinferiancek.core.theme
 
 import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.ui.unit.Dp
@@ -10,9 +10,7 @@ data class Spacing(
     val small: Dp = 8.dp,
     val medium: Dp = 16.dp,
     val large: Dp = 32.dp,
-    val extraLarge: Dp = 64.dp,
-    val listItemPadding: Dp = 1.dp,
-    val radicalImageHeight: Dp = 48.dp,
+    val extraLarge: Dp = 48.dp,
 )
 
 val LocalSpacing = compositionLocalOf { Spacing() }

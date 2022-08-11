@@ -1,4 +1,4 @@
-package com.gavinferiancek.tasky.ui.theme
+package com.gavinferiancek.core.theme
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material.Colors
@@ -33,11 +33,17 @@ private val LightColorPalette = lightColors(
     onSurface = Black,
 )
 
-val Colors.mutedText: Color
-    get() = MutedText
+// Android docs recommends extension properties if only adding a few colors to the theme.
+// Not sure how to get this warning to disappear without using CompositionLocalProvider
+// instead of using extension property.
+val Colors.muted: Color
+    get() = Muted
 
 val Colors.selectedDate: Color
     get() = Yellow
+
+val Colors.hyperlink: Color
+    get() = LightBlue
 
 @Composable
 fun TaskyTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Composable () -> Unit) {

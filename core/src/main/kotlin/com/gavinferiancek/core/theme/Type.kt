@@ -1,4 +1,4 @@
-package com.gavinferiancek.tasky.ui.theme
+package com.gavinferiancek.core.theme
 
 import androidx.compose.material.Typography
 import androidx.compose.ui.text.TextStyle
@@ -6,7 +6,7 @@ import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
-import com.gavinferiancek.tasky.R
+import com.gavinferiancek.core.R
 
 // Set of Material typography styles to start with
 private val inter = FontFamily(
@@ -18,12 +18,12 @@ val Typography = Typography(
     h1 = TextStyle(
         fontFamily = inter,
         fontWeight = FontWeight.Light,
-        fontSize = 48.sp,
+        fontSize = 36.sp,
     ),
     h2 = TextStyle(
         fontFamily = inter,
-        fontWeight = FontWeight.Light,
-        fontSize = 36.sp
+        fontWeight = FontWeight.Bold,
+        fontSize = 24.sp
     ),
     h3 = TextStyle(
         fontFamily = inter,
@@ -47,7 +47,7 @@ val Typography = Typography(
     ),
     subtitle1 = TextStyle(
         fontFamily = inter,
-        fontWeight = FontWeight.Bold,
+        fontWeight = FontWeight.Normal,
         fontSize = 16.sp
     ),
     subtitle2 = TextStyle(
@@ -68,7 +68,7 @@ val Typography = Typography(
     button = TextStyle(
         fontFamily = inter,
         fontWeight = FontWeight.Bold,
-        fontSize = 16.sp
+        fontSize = 18.sp
     ),
     caption = TextStyle(
         fontFamily = inter,

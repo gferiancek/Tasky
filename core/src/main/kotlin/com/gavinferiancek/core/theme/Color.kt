@@ -1,4 +1,4 @@
-package com.gavinferiancek.tasky.ui.theme
+package com.gavinferiancek.core.theme
 
 import androidx.compose.ui.graphics.Color
 
@@ -8,6 +8,7 @@ val DarkGreen = Color(0xFF279F70)
 val LimeGreen = Color(0xFFCAEF45)
 val DarkGray = Color(0xFF222222)
 val LightGray = Color(0xFFF2F2F2F2)
-val MutedText = Color(0xFFA9B4BE)
+val LightBlue = Color(0xFF8E97FD)
+val Muted = Color(0xFFA9B4BE)
 val Yellow = Color(0xFFFDEFA8)
 
