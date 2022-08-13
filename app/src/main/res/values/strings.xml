@@ -1,3 +1,16 @@
 <resources>
     <string name="app_name">Tasky</string>
+
+    <!-- Authentication -->
+    <string name="login_header">Welcome Back!</string>
+    <string name="register_header">Create Your Account</string>
+    <string name="name_placeholder">Full Name</string>
+    <string name="email_placeholder">Email</string>
+    <string name="password_placeholder">Password</string>
+    <string name="signup_base_text">DON\'T HAVE AN ACCOUNT?\u0020</string>
+    <string name="signup_clickable_text">SIGN UP</string>
+    <string name="login_button">LOG IN</string>
+    <string name="register_button">GET STARTED</string>
+    <string name="show_password_content_description">Show password</string>
+    <string name="hide_password_content_description">Hide password</string>
 </resources>
