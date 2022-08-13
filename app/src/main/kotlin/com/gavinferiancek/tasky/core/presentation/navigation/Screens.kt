@@ -10,4 +10,9 @@ sealed class Screens(
         route = "login",
         arguments = emptyList(),
     )
+
+    object Register : Screens(
+        route = "register",
+        arguments = emptyList(),
+    )
 }

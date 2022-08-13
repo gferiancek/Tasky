@@ -1,4 +1,4 @@
-package com.gavinferiancek.tasky.auth.presentation
+package com.gavinferiancek.tasky.auth.presentation.register
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -9,39 +9,36 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
-class AuthViewModel @Inject constructor(
+class RegisterViewModel @Inject constructor(
     private val textValidationManager: TextValidationManager
 ) : ViewModel() {
-    var state by mutableStateOf(AuthState())
+    var state by mutableStateOf(RegisterState())
         private set
 
-    fun onTriggerEvent(event: AuthEvents) {
+    fun onTriggerEvent(event: RegisterEvents) {
         when (event) {
-            is AuthEvents.ResetState -> state = AuthState()
-            is AuthEvents.UpdateName -> {
+            is RegisterEvents.UpdateName -> {
                 state = state.copy(
                     name = event.name,
-                    isNameValidated = textValidationManager.validateName(event.name),
+                    isNameValidated = textValidationManager.validateName(event.name)
                 )
             }
-            is AuthEvents.UpdateEmail -> {
+            is RegisterEvents.UpdateEmail -> {
                 state = state.copy(
                     email = event.email,
                     isEmailValidated = textValidationManager.validateEmail(event.email),
                 )
             }
-            is AuthEvents.ToggleShowPassword -> {
+            is RegisterEvents.ToggleShowPassword -> {
                 state = state.copy(
                     showPassword = event.showPassword,
                 )
             }
-            is AuthEvents.UpdatePassword -> {
+            is RegisterEvents.UpdatePassword -> {
                 state = state.copy(
                     password = event.password,
+                    isPasswordValidated = textValidationManager.validatePassword(event.password)
                 )
-            }
-            is AuthEvents.ToggleShowRegister -> {
-                state = state.copy(showRegister = event.showRegister)
             }
         }
     }
