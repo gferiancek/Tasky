@@ -1,11 +1,14 @@
 package com.gavinferiancek.tasky.auth.presentation.register
 
+import com.gavinferiancek.tasky.auth.domain.validation.ValidationState
+
 data class RegisterState(
     val name: String = "",
-    val isNameValidated: Boolean = false,
+    val nameValidationState: List<ValidationState> = listOf(ValidationState()),
     val email: String = "",
-    val isEmailValidated: Boolean = false,
+    val emailValidationState: List<ValidationState> = listOf(ValidationState()),
     val password: String = "",
-    val isPasswordValidated: Boolean = false,
+    val passwordValidationStates: List<ValidationState> = listOf(ValidationState()),
     val showPassword: Boolean = false,
+    val displayErrors: Boolean = false,
 )
