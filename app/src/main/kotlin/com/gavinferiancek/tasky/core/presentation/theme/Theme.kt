@@ -17,8 +17,11 @@ private val DarkColorPalette = darkColors(
     secondaryVariant = LightGray,
     onSecondary = Black,
     background = Black,
+    onBackground = White,
     surface = DarkGray,
     onSurface = White,
+    error = Red,
+    onError = White,
 )
 
 private val LightColorPalette = lightColors(
@@ -29,8 +32,11 @@ private val LightColorPalette = lightColors(
     secondaryVariant = LightGray,
     onSecondary = Black,
     background = Black,
+    onBackground = White,
     surface = White,
     onSurface = Black,
+    error = Red,
+    onError = White,
 )
 
 // Android docs recommends extension properties if only adding a few colors to the theme.
