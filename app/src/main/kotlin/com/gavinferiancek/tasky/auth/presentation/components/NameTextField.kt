@@ -19,7 +19,7 @@ import com.gavinferiancek.tasky.auth.domain.validation.ValidationState
  * @param modifier Modifier applied to the [ValidationTextField].
  * @param name Value to display in [ValidationTextField].
  * @param validationStates List of [ValidationState] objects for this field.
- * @param displayErrors Decides whether or not the [ValidationTextField]'s isError state will be triggered.
+ * @param shouldDisplayErrors Decides whether or not the [ValidationTextField]'s isError state will be triggered.
  * @param onUpdateName Lambda to update [name] field.
  */
 @Composable
@@ -27,21 +27,21 @@ fun NameTextField(
     modifier: Modifier = Modifier,
     name: String,
     validationStates: List<ValidationState>,
-    displayErrors: Boolean,
+    shouldDisplayErrors: Boolean,
     onUpdateName: (String) -> Unit,
 ) {
     ValidationTextField(
         modifier = modifier.fillMaxWidth(),
         value = name,
         validationStates = validationStates,
-        isError = displayErrors,
+        shouldDisplayErrors = shouldDisplayErrors,
         placeholder = stringResource(id = R.string.name_placeholder),
         keyboardOptions = KeyboardOptions(
             keyboardType = KeyboardType.Email,
             imeAction = ImeAction.Next,
         ),
         trailingIcon = {
-            if (validationStates.all { it.isValidated }) {
+            if (validationStates.all { it.isValid }) {
                 Icon(
                     imageVector = Icons.Default.Check,
                     contentDescription = null,

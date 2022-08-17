@@ -50,7 +50,7 @@ fun RegisterScreen(
                 NameTextField(
                     name = state.name,
                     validationStates = state.nameValidationState,
-                    displayErrors = state.displayErrors,
+                    shouldDisplayErrors = state.shouldDisplayErrors,
                     onUpdateName = { name ->
                         events(RegisterEvents.UpdateName(name))
                     }
@@ -58,7 +58,7 @@ fun RegisterScreen(
                 EmailTextField(
                     email = state.email,
                     validationStates = state.emailValidationState,
-                    displayErrors = state.displayErrors,
+                    shouldDisplayErrors = state.shouldDisplayErrors,
                     onUpdateEmail = { email ->
                         events(RegisterEvents.UpdateEmail(email))
                     }
@@ -66,8 +66,8 @@ fun RegisterScreen(
                 PasswordTextField(
                     password = state.password,
                     validationStates = state.passwordValidationStates,
-                    showPassword = state.showPassword,
-                    displayErrors = state.displayErrors,
+                    shouldShowPassword = state.shouldShowPassword,
+                    shouldDisplayErrors = state.shouldDisplayErrors,
                     onToggleShowPassword = { events(RegisterEvents.ToggleShowPassword) },
                     onUpdatePassword = { password ->
                         events(RegisterEvents.UpdatePassword(password))

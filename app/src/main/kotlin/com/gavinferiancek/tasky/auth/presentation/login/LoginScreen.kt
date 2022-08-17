@@ -55,7 +55,7 @@ fun LoginScreen(
                 EmailTextField(
                     email = state.email,
                     validationStates = state.emailValidationStates,
-                    displayErrors = state.displayErrors,
+                    shouldDisplayErrors = state.shouldDisplayErrors,
                     onUpdateEmail = { email ->
                         events(LoginEvents.UpdateEmail(email))
                     }
@@ -63,8 +63,8 @@ fun LoginScreen(
                 PasswordTextField(
                     password = state.password,
                     validationStates = state.passwordValidationStates,
-                    showPassword = state.showPassword,
-                    displayErrors = state.displayErrors,
+                    shouldShowPassword = state.shouldShowPassword,
+                    shouldDisplayErrors = state.shouldDisplayErrors,
                     onToggleShowPassword = { events(LoginEvents.ToggleShowPassword) },
                     onUpdatePassword = { password ->
                         events(LoginEvents.UpdatePassword(password))

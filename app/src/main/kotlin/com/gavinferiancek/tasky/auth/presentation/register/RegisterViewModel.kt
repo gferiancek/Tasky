@@ -18,7 +18,7 @@ class RegisterViewModel @Inject constructor(
     fun onTriggerEvent(event: RegisterEvents) {
         when (event) {
             is RegisterEvents.ToggleShowPassword -> state =
-                state.copy(showPassword = !state.showPassword)
+                state.copy(shouldShowPassword = !state.shouldShowPassword)
             is RegisterEvents.UpdateName -> {
                 state = state.copy(
                     name = event.name,
@@ -47,13 +47,13 @@ class RegisterViewModel @Inject constructor(
             emailValidationState = validationManager.validateEmail(state.email),
             passwordValidationStates = validationManager.validatePassword(state.password)
         )
-        if (state.nameValidationState.all { it.isValidated } &&
-            state.emailValidationState.all { it.isValidated } &&
-            state.passwordValidationStates.all { it.isValidated }
+        if (state.nameValidationState.all { it.isValid } &&
+            state.emailValidationState.all { it.isValid } &&
+            state.passwordValidationStates.all { it.isValid }
         ) {
             // TODO Make API Call
         } else {
-            state = state.copy(displayErrors = true)
+            state = state.copy(shouldDisplayErrors = true)
         }
     }
 }

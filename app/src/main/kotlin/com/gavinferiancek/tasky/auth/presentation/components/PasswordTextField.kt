@@ -22,9 +22,9 @@ import com.gavinferiancek.tasky.core.presentation.theme.muted
  * @param modifier Modifier applied to the [ValidationTextField]
  * @param password Value to display in [ValidationTextField]
  * @param validationStates List of [ValidationState] objects for this field.
- * @param showPassword Applies [PasswordVisualTransformation] to value if true.
- * @param displayErrors Decides whether or not the [ValidationTextField]'s isError state will be triggered.
- * @param onToggleShowPassword Lambda to toggle [showPassword] value.
+ * @param shouldShowPassword Applies [PasswordVisualTransformation] to value if true.
+ * @param shouldDisplayErrors Decides whether or not the [ValidationTextField]'s isError state will be triggered.
+ * @param onToggleShowPassword Lambda to toggle [shouldShowPassword] value.
  * @param onUpdatePassword Lambda to update [password] field.
  * @param onDone Lambda that submits entered data. (Equivalent of layout's button press.)
  */
@@ -33,8 +33,8 @@ fun PasswordTextField(
     modifier: Modifier = Modifier,
     password: String,
     validationStates: List<ValidationState>,
-    showPassword: Boolean,
-    displayErrors: Boolean,
+    shouldShowPassword: Boolean,
+    shouldDisplayErrors: Boolean,
     onToggleShowPassword: (Boolean) -> Unit,
     onUpdatePassword: (String) -> Unit,
     onDone: () -> Unit,
@@ -43,8 +43,8 @@ fun PasswordTextField(
         modifier = modifier.fillMaxWidth(),
         value = password,
         validationStates = validationStates,
-        isError = displayErrors,
-        visualTransformation = if (showPassword) VisualTransformation.None else PasswordVisualTransformation(),
+        shouldDisplayErrors = shouldDisplayErrors,
+        visualTransformation = if (shouldShowPassword) VisualTransformation.None else PasswordVisualTransformation(),
         placeholder = stringResource(id = R.string.password_placeholder),
         keyboardOptions = KeyboardOptions(
             keyboardType = KeyboardType.Password,
@@ -53,15 +53,15 @@ fun PasswordTextField(
         trailingIcon = {
             IconButton(
                 onClick = {
-                    onToggleShowPassword(!showPassword)
+                    onToggleShowPassword(!shouldShowPassword)
                 }
             ) {
                 Icon(
                     painter = painterResource(
-                        id = if (showPassword) R.drawable.ic_visibility_off_24 else R.drawable.ic_visibility_24
+                        id = if (shouldShowPassword) R.drawable.ic_visibility_off_24 else R.drawable.ic_visibility_24
                     ),
                     contentDescription = stringResource(
-                        id = if (showPassword) R.string.hide_password_content_description else R.string.show_password_content_description
+                        id = if (shouldShowPassword) R.string.hide_password_content_description else R.string.show_password_content_description
                     ),
                     tint = MaterialTheme.colors.muted,
                 )

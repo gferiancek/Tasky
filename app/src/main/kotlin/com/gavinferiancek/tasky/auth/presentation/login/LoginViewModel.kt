@@ -17,7 +17,7 @@ class LoginViewModel @Inject constructor(
 
     fun onTriggerEvent(event: LoginEvents) {
         when (event) {
-            is LoginEvents.ToggleShowPassword -> state = state.copy(showPassword = !state.showPassword)
+            is LoginEvents.ToggleShowPassword -> state = state.copy(shouldShowPassword = !state.shouldShowPassword)
             is LoginEvents.UpdateEmail -> {
                 state = state.copy(
                     email = event.email,
@@ -39,12 +39,12 @@ class LoginViewModel @Inject constructor(
             emailValidationStates = validationManager.validateEmail(state.email),
             passwordValidationStates = validationManager.validatePassword(state.password)
         )
-        if (state.emailValidationStates.all { it.isValidated } &&
-            state.passwordValidationStates.all { it.isValidated }
+        if (state.emailValidationStates.all { it.isValid } &&
+            state.passwordValidationStates.all { it.isValid }
         ) {
             // TODO make API call
         } else {
-            state = state.copy(displayErrors = true)
+            state = state.copy(shouldDisplayErrors = true)
         }
     }
 }

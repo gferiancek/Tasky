@@ -7,6 +7,6 @@ data class LoginState(
     val emailValidationStates: List<ValidationState> = listOf(ValidationState()),
     val password: String = "",
     val passwordValidationStates: List<ValidationState> = listOf(ValidationState()),
-    val showPassword: Boolean = false,
-    val displayErrors: Boolean = false,
+    val shouldShowPassword: Boolean = false,
+    val shouldDisplayErrors: Boolean = false,
 )
