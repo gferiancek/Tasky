@@ -17,11 +17,11 @@ class TextValidationManager(
     fun validateName(name: String): List<ValidationState> {
         return listOf(
             when {
-                name.count() < 2 || name.count() > 50 -> ValidationState(
-                    isValidated = false,
+                name.count() in 2..50 -> ValidationState(isValid = true)
+                else -> ValidationState(
+                    isValid = false,
                     message = UiText.StringResource(R.string.error_invalid_name_length)
                 )
-                else -> ValidationState(isValidated = true)
             }
         )
     }
@@ -29,14 +29,10 @@ class TextValidationManager(
     fun validateEmail(email: String): List<ValidationState> {
         return listOf(
             when {
-                emailMatcher.matches(email) -> ValidationState(isValidated = true)
-                email.isBlank() -> ValidationState(
-                    isValidated = false,
-                    message = UiText.StringResource(R.string.error_email_blank)
-                )
+                emailMatcher.matches(email) -> ValidationState(isValid = true)
                 else -> ValidationState(
-                    isValidated = false,
-                    message = UiText.StringResource(R.string.error_invalid_email)
+                    isValid = false,
+                    message = UiText.StringResource(R.string.error_email_blank)
                 )
             }
         )
@@ -45,19 +41,19 @@ class TextValidationManager(
     fun validatePassword(password: String): List<ValidationState> {
         return listOf(
             ValidationState(
-                isValidated = password.count() >= 9,
+                isValid = password.count() >= 9,
                 message = UiText.StringResource(R.string.password_length_requirement)
             ),
             ValidationState(
-                isValidated = password.any { it.isDigit() },
+                isValid = password.any { it.isDigit() },
                 message = UiText.StringResource(R.string.password_digit_requirement)
             ),
             ValidationState(
-                isValidated = password.any { it.isLowerCase() },
+                isValid = password.any { it.isLowerCase() },
                 message = UiText.StringResource(R.string.password_lowercase_requirement)
             ),
             ValidationState(
-                isValidated = password.any { it.isUpperCase() },
+                isValid = password.any { it.isUpperCase() },
                 message = UiText.StringResource(R.string.password_uppercase_requirement)
             ),
         )
