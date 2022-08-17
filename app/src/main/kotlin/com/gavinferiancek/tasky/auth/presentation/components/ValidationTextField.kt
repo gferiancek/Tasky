@@ -10,6 +10,7 @@ import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Text
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -25,7 +26,7 @@ import com.gavinferiancek.tasky.core.presentation.theme.muted
  * @param modifier Modifier applied to OutlinedTextField.
  * @param value Input text to be shown in the TextField.
  * @param validationStates List of [ValidationState] objects used for styling and error message display.
- * @param isError Decides whether or not the [OutlinedTextField]'s isError state will be triggered.
+ * @param shouldDisplayErrors Decides whether or not the [OutlinedTextField]'s isError state will be triggered.
  * @param visualTransformation Applies [VisualTransformation] to [value] field. Defaults to
  * VisualTransformation.None.
  * @param placeholder String displayed when TextField is empty.
@@ -41,7 +42,7 @@ fun ValidationTextField(
     modifier: Modifier = Modifier,
     value: String,
     validationStates: List<ValidationState>,
-    isError: Boolean,
+    shouldDisplayErrors: Boolean,
     visualTransformation: VisualTransformation = VisualTransformation.None,
     placeholder: String,
     keyboardOptions: KeyboardOptions,
@@ -53,6 +54,9 @@ fun ValidationTextField(
     val keyboardController = LocalSoftwareKeyboardController.current
     val focusManager = LocalFocusManager.current
 
+    val hasErrors = remember(validationStates) {
+        validationStates.any { !it.isValid }
+    }
     Column {
         OutlinedTextField(
             modifier = modifier,
@@ -61,7 +65,7 @@ fun ValidationTextField(
                 onUpdateValue(newValue)
             },
             placeholder = { Text(text = placeholder) },
-            isError = isError,
+            isError = shouldDisplayErrors,
             visualTransformation = visualTransformation,
             singleLine = true,
             trailingIcon = { trailingIcon() },
@@ -78,7 +82,7 @@ fun ValidationTextField(
                 backgroundColor = MaterialTheme.colors.secondaryVariant,
                 focusedIndicatorColor = MaterialTheme.colors.muted,
                 unfocusedIndicatorColor = Color.Transparent,
-                errorIndicatorColor = if (validationStates.all { it.isValidated }) MaterialTheme.colors.muted else MaterialTheme.colors.error,
+                errorIndicatorColor = if (hasErrors) MaterialTheme.colors.error else MaterialTheme.colors.muted,
                 placeholderColor = MaterialTheme.colors.muted,
             ),
         )
@@ -89,12 +93,15 @@ fun ValidationTextField(
                     bottom = spacing.medium,
                 )
         ) {
-            AnimatedVisibility(visible = isError && validationStates.any { !it.isValidated }) {
+            AnimatedVisibility(visible = shouldDisplayErrors && hasErrors) {
                 Column {
                     validationStates.forEach { validation ->
+                        val isValid = remember(validation) {
+                            validation.isValid
+                        }
                         Text(
-                            text = validation.message?.asString()?: "",
-                            color = if (validation.isValidated) MaterialTheme.colors.primaryVariant else MaterialTheme.colors.error,
+                            text = validation.message?.asString() ?: "",
+                            color = if (isValid) MaterialTheme.colors.primaryVariant else MaterialTheme.colors.error,
                             style = MaterialTheme.typography.caption,
                         )
                     }
