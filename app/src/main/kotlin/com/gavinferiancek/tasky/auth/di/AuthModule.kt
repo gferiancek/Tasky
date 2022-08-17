@@ -1,5 +1,7 @@
 package com.gavinferiancek.tasky.auth.di
 
+import com.gavinferiancek.tasky.auth.data.validation.EmailMatcherImpl
+import com.gavinferiancek.tasky.auth.domain.validation.EmailMatcher
 import com.gavinferiancek.tasky.auth.domain.validation.TextValidationManager
 import dagger.Module
 import dagger.Provides
@@ -13,5 +15,13 @@ object AuthModule {
 
     @Provides
     @ViewModelScoped
-    fun provideTextValidationManager() = TextValidationManager()
+    fun provideEmailMatcher(): EmailMatcher {
+        return EmailMatcherImpl()
+    }
+
+    @Provides
+    @ViewModelScoped
+    fun provideTextValidationManager(emailMatcher: EmailMatcher): TextValidationManager {
+        return TextValidationManager(emailMatcher)
+    }
 }

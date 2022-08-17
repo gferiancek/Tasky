@@ -1,15 +1,61 @@
 package com.gavinferiancek.tasky.auth.domain.validation
 
-class TextValidationManager {
+import com.gavinferiancek.tasky.R
+import com.gavinferiancek.tasky.core.util.UiText
 
-    fun validateName(name: String) = name.length in 2..50
+/**
+ * Manager class to handle text validation in LoginScreen.kt and RegisterScreen.kt
+ *
+ * NOTE: Even though [validateName] and [validateEmail] can only have one active validation state,
+ * those functions still return lists. UI is already required to handle a list for the password validation
+ * states, so if we ever wanted that to be true for name/email we'd only need to change code here.
+ */
+class TextValidationManager(
+    private val emailMatcher: EmailMatcher,
+) {
 
-    fun validateEmail(email: String) = android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()
+    fun validateName(name: String): List<ValidationState> {
+        return listOf(
+            when {
+                name.count() in 2..50 -> ValidationState(isValid = true)
+                else -> ValidationState(
+                    isValid = false,
+                    message = UiText.StringResource(R.string.error_invalid_name_length)
+                )
+            }
+        )
+    }
 
-    fun validatePassword(password: String): Boolean {
-        return password.length >= 9 &&
-                password.any { it.isDigit() } &&
-                password.any { it.isLowerCase() } &&
-                password.any { it.isUpperCase() }
+    fun validateEmail(email: String): List<ValidationState> {
+        return listOf(
+            when {
+                emailMatcher.matches(email) -> ValidationState(isValid = true)
+                else -> ValidationState(
+                    isValid = false,
+                    message = UiText.StringResource(R.string.error_email_blank)
+                )
+            }
+        )
+    }
+
+    fun validatePassword(password: String): List<ValidationState> {
+        return listOf(
+            ValidationState(
+                isValid = password.count() >= 9,
+                message = UiText.StringResource(R.string.password_length_requirement)
+            ),
+            ValidationState(
+                isValid = password.any { it.isDigit() },
+                message = UiText.StringResource(R.string.password_digit_requirement)
+            ),
+            ValidationState(
+                isValid = password.any { it.isLowerCase() },
+                message = UiText.StringResource(R.string.password_lowercase_requirement)
+            ),
+            ValidationState(
+                isValid = password.any { it.isUpperCase() },
+                message = UiText.StringResource(R.string.password_uppercase_requirement)
+            ),
+        )
     }
 }
