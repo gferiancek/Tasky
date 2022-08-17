@@ -10,19 +10,7 @@ class TextValidationManagerTest {
 
     private val emailMatcher = object : EmailMatcher {
         override fun matches(email: String): Boolean {
-            return if (email.isNotBlank()) {
-                val atSignIndex = email.indexOfFirst { it.toString() == "@" }
-
-                listOf(
-                    email.first().toString() != "@",
-                    email.count { it.toString() == "@" } == 1,
-                    email[atSignIndex + 1].toString() != ".",
-                    email.substring(startIndex = atSignIndex + 2).contains("."),
-                    email.indexOfLast { it.toString() == "." } < email.count() - 1,
-                ).all { it }
-            } else {
-                false
-            }
+            return true
         }
     }
 
@@ -37,7 +25,7 @@ class TextValidationManagerTest {
 
         val actual = validationManager.validateName(name)
 
-        assertThat(actual.all { it.isValidated }).isFalse()
+        assertThat(actual.all { it.isValid }).isFalse()
     }
 
     @Test
@@ -46,7 +34,7 @@ class TextValidationManagerTest {
 
         val actual = validationManager.validateName(name)
 
-        assertThat(actual.all { it.isValidated }).isFalse()
+        assertThat(actual.all { it.isValid }).isFalse()
     }
 
     @Test
@@ -55,79 +43,7 @@ class TextValidationManagerTest {
 
         val actual = validationManager.validateName(name)
 
-        assertThat(actual.all { it.isValidated }).isTrue()
-    }
-
-    @Test
-    fun `Blank email fails to validate`() {
-        val email = ""
-
-        val actual = validationManager.validateEmail(email)
-
-        assertThat(actual.all { it.isValidated }).isFalse()
-    }
-
-    @Test
-    fun `Email with no name fails to validate`() {
-        val email = "@domain.com"
-
-        val actual = validationManager.validateEmail(email)
-
-        assertThat(actual.all { it.isValidated }).isFalse()
-    }
-
-    @Test
-    fun `Email with no @ fails to validate`() {
-        val email = "exampledomain.com"
-
-        val actual = validationManager.validateEmail(email)
-
-        assertThat(actual.all { it.isValidated }).isFalse()
-    }
-
-    @Test
-    fun `Email with more than one @ fails to validate`() {
-        val email = "example@@domain.com"
-
-        val actual = validationManager.validateEmail(email)
-
-        assertThat(actual.all { it.isValidated }).isFalse()
-    }
-
-    @Test
-    fun `Email with no domain name fails to validate`() {
-        val email = "example@.com"
-
-        val actual = validationManager.validateEmail(email)
-
-        assertThat(actual.all { it.isValidated }).isFalse()
-    }
-
-    @Test
-    fun `Email with no period in domain name fails to validate`() {
-        val email = "example@domaincom"
-
-        val actual = validationManager.validateEmail(email)
-
-        assertThat(actual.all { it.isValidated }).isFalse()
-    }
-
-    @Test
-    fun `Email with no TLD fails to validate`() {
-        val email = "example@domain."
-
-        val actual = validationManager.validateEmail(email)
-
-        assertThat(actual.all { it.isValidated }).isFalse()
-    }
-
-    @Test
-    fun `Properly formatted email validates successfully`() {
-        val email = "example@domain.com"
-
-        val actual = validationManager.validateEmail(email)
-
-        assertThat(actual.all { it.isValidated }).isTrue()
+        assertThat(actual.all { it.isValid }).isTrue()
     }
 
     @Test
@@ -136,7 +52,7 @@ class TextValidationManagerTest {
 
         val actual = validationManager.validatePassword(password)
 
-        assertThat(actual.all { it.isValidated }).isFalse()
+        assertThat(actual.all { it.isValid }).isFalse()
     }
 
     @Test
@@ -145,7 +61,7 @@ class TextValidationManagerTest {
 
         val actual = validationManager.validatePassword(password)
 
-        assertThat(actual.all { it.isValidated }).isFalse()
+        assertThat(actual.all { it.isValid }).isFalse()
     }
 
     @Test
@@ -154,7 +70,7 @@ class TextValidationManagerTest {
 
         val actual = validationManager.validatePassword(password)
 
-        assertThat(actual.all { it.isValidated }).isFalse()
+        assertThat(actual.all { it.isValid }).isFalse()
     }
 
     @Test
@@ -163,7 +79,7 @@ class TextValidationManagerTest {
 
         val actual = validationManager.validatePassword(password)
 
-        assertThat(actual.all { it.isValidated }).isFalse()
+        assertThat(actual.all { it.isValid }).isFalse()
     }
 
     @Test
@@ -172,6 +88,6 @@ class TextValidationManagerTest {
 
         val actual = validationManager.validatePassword(password)
 
-        assertThat(actual.all { it.isValidated }).isTrue()
+        assertThat(actual.all { it.isValid }).isTrue()
     }
 }
