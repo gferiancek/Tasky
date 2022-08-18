@@ -2,10 +2,8 @@ package com.gavinferiancek.tasky.auth.data.repository
 
 import com.gavinferiancek.tasky.auth.data.remote.AuthApi
 import com.gavinferiancek.tasky.auth.data.remote.login.LoginRequestDto
-import com.gavinferiancek.tasky.auth.data.remote.login.toUserInfo
 import com.gavinferiancek.tasky.auth.data.remote.register.RegisterRequestDto
 import com.gavinferiancek.tasky.auth.domain.repository.AuthRepository
-import com.gavinferiancek.tasky.auth.domain.user.User
 
 class AuthRepositoryImpl(
     private val authApi: AuthApi,
@@ -14,13 +12,14 @@ class AuthRepositoryImpl(
     override suspend fun loginUser(
         email: String,
         password: String,
-    ): User {
-        return authApi.loginUser(
+    ) {
+        val authorizedUser = authApi.loginUser(
             loginRequest = LoginRequestDto(
                 email = email,
                 password = password
             )
-        ).toUserInfo()
+        )
+        // TODO insert authorizedUser into DataStore
     }
 
     override suspend fun registerUser(

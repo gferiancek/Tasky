@@ -1,7 +1,6 @@
 package com.gavinferiancek.tasky.auth.domain.authorization
 
 import com.gavinferiancek.tasky.auth.domain.repository.AuthRepository
-import com.gavinferiancek.tasky.auth.domain.user.User
 import com.gavinferiancek.tasky.core.data.remote.error.convertToUiText
 import com.gavinferiancek.tasky.core.domain.util.DataState
 import kotlinx.coroutines.flow.Flow
@@ -17,13 +16,13 @@ class AuthManager(
     fun loginUser(
         email: String,
         password: String,
-    ): Flow<DataState<User>> = flow {
+    ): Flow<DataState<Unit>> = flow {
         emit(DataState.Loading(isLoading = true))
-        val userInfo = authRepository.loginUser(
+        authRepository.loginUser(
             email = email,
             password = password,
         )
-        emit(DataState.Success(data = userInfo))
+        emit(DataState.Success(Unit))
     }.catch { e ->
         if (e is CancellationException) throw e
         else emit(DataState.Error(uiText = e.convertToUiText()))
