@@ -6,6 +6,8 @@ sealed class RegisterEvents {
 
     object Submit : RegisterEvents()
 
+    object SnackbarDismissed : RegisterEvents()
+
     data class UpdateName(
         val name: String,
     ) : RegisterEvents()

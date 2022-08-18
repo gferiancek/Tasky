@@ -6,6 +6,8 @@ sealed class LoginEvents {
 
     object Submit : LoginEvents()
 
+    object SnackbarDismissed : LoginEvents()
+
     data class UpdateEmail(
         val email: String,
     ) : LoginEvents()

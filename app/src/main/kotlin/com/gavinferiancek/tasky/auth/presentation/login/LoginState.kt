@@ -1,6 +1,7 @@
 package com.gavinferiancek.tasky.auth.presentation.login
 
 import com.gavinferiancek.tasky.auth.domain.validation.ValidationState
+import com.gavinferiancek.tasky.core.util.UiText
 
 data class LoginState(
     val email: String = "",
@@ -9,4 +10,6 @@ data class LoginState(
     val passwordValidationStates: List<ValidationState> = listOf(ValidationState()),
     val shouldShowPassword: Boolean = false,
     val shouldDisplayErrors: Boolean = false,
+    val isLoading: Boolean = false,
+    val snackbarMessage: UiText? = null,
 )

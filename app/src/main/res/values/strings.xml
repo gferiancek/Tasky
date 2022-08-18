@@ -20,4 +20,6 @@
     <string name="password_digit_requirement">Contains 1 number</string>
     <string name="password_lowercase_requirement">Contains 1 lowercase character</string>
     <string name="password_uppercase_requirement">Contains 1 uppercase character</string>
+    <string name="error_unknown">An unknown error occurred.</string>
+    <string name="snackbar_action_ok">OK</string>
 </resources>
