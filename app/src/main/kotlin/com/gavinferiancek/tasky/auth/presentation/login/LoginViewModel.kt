@@ -7,10 +7,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gavinferiancek.tasky.auth.domain.repository.AuthRepository
 import com.gavinferiancek.tasky.auth.domain.validation.TextValidationManager
-import com.gavinferiancek.tasky.core.domain.util.DataState
+import com.gavinferiancek.tasky.core.data.remote.error.getUiText
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -25,7 +23,7 @@ class LoginViewModel @Inject constructor(
 
     fun onTriggerEvent(event: LoginEvents) {
         when (event) {
-            is LoginEvents.SnackbarDismissed -> state = state.copy(snackbarMessage = null)
+            is LoginEvents.SnackbarDismissed -> state = state.copy(infoMessage = null)
             is LoginEvents.ToggleShowPassword -> state =
                 state.copy(shouldShowPassword = !state.shouldShowPassword)
             is LoginEvents.UpdateEmail -> {
@@ -60,16 +58,16 @@ class LoginViewModel @Inject constructor(
 
     private fun loginUser() {
         viewModelScope.launch {
+            state = state.copy(isLoading = true)
             authRepository.loginUser(
                 email = state.email,
                 password = state.password,
-            ).onEach { dataState ->
-                state = when (dataState) {
-                    is DataState.Loading -> state.copy(isLoading = dataState.isLoading)
-                    is DataState.Success -> state.copy(isLoggedIn = true)
-                    is DataState.Error -> state.copy(snackbarMessage = dataState.uiText)
-                }
-            }.collect()
+            ).onSuccess {
+                state = state.copy(isLoggedIn = true)
+            }.onFailure { e ->
+                state = state.copy(infoMessage = e.getUiText())
+            }
+            state = state.copy(isLoading = false)
         }
     }
 }

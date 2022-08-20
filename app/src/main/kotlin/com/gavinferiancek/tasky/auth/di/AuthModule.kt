@@ -13,11 +13,9 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
-import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.create
-import javax.inject.Named
 import javax.inject.Singleton
 
 @Module
@@ -38,25 +36,7 @@ object AuthModule {
 
     @Provides
     @Singleton
-    @Named("AuthClient")
-    fun provideOkHttpClient(): OkHttpClient {
-        return OkHttpClient.Builder()
-            .addInterceptor(
-                HttpLoggingInterceptor().apply {
-                    level = HttpLoggingInterceptor.Level.BODY
-                }
-            )
-            .addInterceptor { chain ->
-                val request = chain.request().newBuilder()
-                    .addHeader("x-api-key", BuildConfig.API_KEY)
-                chain.proceed(request.build())
-            }
-            .build()
-    }
-
-    @Provides
-    @Singleton
-    fun provideAuthApi(@Named("AuthClient") client: OkHttpClient): AuthApi {
+    fun provideAuthApi(client: OkHttpClient): AuthApi {
         return Retrofit.Builder()
             .baseUrl(BuildConfig.BASE_URL)
             .client(client)
@@ -67,7 +47,13 @@ object AuthModule {
 
     @Provides
     @Singleton
-    fun provideAuthRepository(authApi: AuthApi, userStore: UserStore): AuthRepository {
-        return AuthRepositoryImpl(authApi = authApi, userStore = userStore,)
+    fun provideAuthRepository(
+        authApi: AuthApi,
+        userStore: UserStore
+    ): AuthRepository {
+        return AuthRepositoryImpl(
+            authApi = authApi,
+            userStore = userStore,
+        )
     }
 }

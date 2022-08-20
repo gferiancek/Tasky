@@ -15,4 +15,9 @@ sealed class Screens(
         route = "register",
         arguments = emptyList(),
     )
+
+    object Agenda : Screens(
+        route = "agenda",
+        arguments = emptyList(),
+    )
 }

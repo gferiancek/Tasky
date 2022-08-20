@@ -8,7 +8,7 @@ data class LoginState(
     val emailValidationStates: List<ValidationState> = listOf(ValidationState()),
     val password: String = "",
     val passwordValidationStates: List<ValidationState> = listOf(ValidationState()),
-    val snackbarMessage: UiText? = null,
+    val infoMessage: UiText? = null,
     val shouldShowPassword: Boolean = false,
     val shouldDisplayErrors: Boolean = false,
     val isLoading: Boolean = false,

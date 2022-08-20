@@ -5,12 +5,12 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.gavinferiancek.tasky.R
 import com.gavinferiancek.tasky.auth.domain.repository.AuthRepository
 import com.gavinferiancek.tasky.auth.domain.validation.TextValidationManager
-import com.gavinferiancek.tasky.core.domain.util.DataState
+import com.gavinferiancek.tasky.core.data.remote.error.getUiText
+import com.gavinferiancek.tasky.core.util.UiText
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -24,7 +24,7 @@ class RegisterViewModel @Inject constructor(
 
     fun onTriggerEvent(event: RegisterEvents) {
         when (event) {
-            is RegisterEvents.SnackbarDismissed -> state = state.copy(snackbarMessage = null)
+            is RegisterEvents.SnackbarDismissed -> state = state.copy(infoMessage = null)
             is RegisterEvents.ToggleShowPassword -> state =
                 state.copy(shouldShowPassword = !state.shouldShowPassword)
             is RegisterEvents.UpdateName -> {
@@ -67,19 +67,20 @@ class RegisterViewModel @Inject constructor(
 
     private fun registerUser() {
         viewModelScope.launch {
+            state = state.copy(isLoading = true)
             authRepository.registerUser(
                 fullName = state.name,
                 email = state.email,
                 password = state.password,
-            ).onEach { dataState ->
-                when (dataState) {
-                    is DataState.Loading -> state = state.copy(isLoading = dataState.isLoading)
-                    is DataState.Success -> {
-                        // TODO Navigate to Login OR call authManager.loginUser and navigate to Agenda.
-                    }
-                    is DataState.Error -> state = state.copy(snackbarMessage = dataState.uiText)
-                }
-            }.collect()
+            ).onSuccess {
+                state = state.copy(
+                    hasCreatedAccount = true,
+                    infoMessage = UiText.StringResource(R.string.account_created),
+                )
+            }.onFailure { e ->
+                state = state.copy(infoMessage = e.getUiText())
+            }
+            state = state.copy(isLoading = false)
         }
     }
 }

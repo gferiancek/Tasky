@@ -3,7 +3,16 @@ package com.gavinferiancek.tasky
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material.Scaffold
+import androidx.compose.material.ScaffoldState
+import androidx.compose.material.Text
+import androidx.compose.material.rememberScaffoldState
+import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.Modifier
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
@@ -22,30 +31,41 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
+    private val viewModel: MainViewModel by viewModels()
+
     @OptIn(ExperimentalAnimationApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         installSplashScreen().apply {
             setKeepOnScreenCondition {
-                // TODO Check if user token is valid
-                false
+                viewModel.isLoading.value
             }
         }
         setContent {
             TaskyTheme {
                 val navController = rememberAnimatedNavController()
-                AnimatedNavHost(
-                    navController = navController,
-                    startDestination = Screens.Login.route,
-                    builder = {
-                        addLoginScreen(
-                            navController = navController,
-                        )
-                        addRegisterScreen(
-                            navController = navController,
-                        )
-                    }
-                )
+                val scaffoldState = rememberScaffoldState()
+                Scaffold(
+                    scaffoldState = scaffoldState,
+                ) {
+                    AnimatedNavHost(
+                        navController = navController,
+                        startDestination = viewModel.startDestination.collectAsState().value,
+                        builder = {
+                            addLoginScreen(
+                                navController = navController,
+                                scaffoldState = scaffoldState,
+                            )
+                            addRegisterScreen(
+                                navController = navController,
+                                scaffoldState = scaffoldState,
+                            )
+                            addAgendaScreen(
+                                navController = navController,
+                            )
+                        }
+                    )
+                }
             }
         }
     }
@@ -54,6 +74,7 @@ class MainActivity : ComponentActivity() {
 @OptIn(ExperimentalAnimationApi::class)
 fun NavGraphBuilder.addLoginScreen(
     navController: NavController,
+    scaffoldState: ScaffoldState,
 ) {
     composable(
         route = Screens.Login.route
@@ -61,8 +82,14 @@ fun NavGraphBuilder.addLoginScreen(
         val viewModel: LoginViewModel = hiltViewModel()
         LoginScreen(
             state = viewModel.state,
+            scaffoldState = scaffoldState,
             events = viewModel::onTriggerEvent,
-            onNavigateToRegister =  { navController.navigate(Screens.Register.route) },
+            onNavigateToRegister = { navController.navigate(Screens.Register.route) },
+            onNavigateToAgenda = {
+                navController.navigate(Screens.Agenda.route) {
+                    popUpTo(Screens.Login.route) { inclusive = true }
+                }
+            }
         )
     }
 }
@@ -70,6 +97,7 @@ fun NavGraphBuilder.addLoginScreen(
 @OptIn(ExperimentalAnimationApi::class)
 fun NavGraphBuilder.addRegisterScreen(
     navController: NavController,
+    scaffoldState: ScaffoldState,
 ) {
     composable(
         route = Screens.Register.route
@@ -77,8 +105,25 @@ fun NavGraphBuilder.addRegisterScreen(
         val viewModel: RegisterViewModel = hiltViewModel()
         RegisterScreen(
             state = viewModel.state,
+            scaffoldState = scaffoldState,
             events = viewModel::onTriggerEvent,
             onNavigateUp = { navController.popBackStack() },
         )
+    }
+}
+
+@OptIn(ExperimentalAnimationApi::class)
+fun NavGraphBuilder.addAgendaScreen(
+    navController: NavController,
+) {
+    composable(
+        route = Screens.Agenda.route,
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize(),
+        ) {
+            Text("This is the Agenda Screen!")
+        }
     }
 }
