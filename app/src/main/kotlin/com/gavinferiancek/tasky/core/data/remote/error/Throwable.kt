@@ -4,7 +4,7 @@ import com.gavinferiancek.tasky.R
 import com.gavinferiancek.tasky.core.util.UiText
 import retrofit2.HttpException
 
-fun Throwable.convertToUiText(): UiText {
+fun Throwable.getUiText(): UiText {
     val message = when (this) {
         is HttpException -> extractExceptionMessage()
         else -> message

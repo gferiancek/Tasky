@@ -5,18 +5,19 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.gavinferiancek.tasky.auth.domain.authorization.AuthManager
+import com.gavinferiancek.tasky.auth.domain.repository.AuthRepository
 import com.gavinferiancek.tasky.auth.domain.validation.TextValidationManager
 import com.gavinferiancek.tasky.core.domain.util.DataState
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
     private val validationManager: TextValidationManager,
-    private val authManager: AuthManager,
+    private val authRepository: AuthRepository,
 ) : ViewModel() {
     var state by mutableStateOf(LoginState())
         private set
@@ -58,17 +59,17 @@ class LoginViewModel @Inject constructor(
     }
 
     private fun loginUser() {
-        authManager.loginUser(
-            email = state.email,
-            password = state.password,
-        ).onEach { dataState ->
-            when (dataState) {
-                is DataState.Loading -> state = state.copy(isLoading = dataState.isLoading)
-                is DataState.Success -> {
-                    //TODO navigate to Agenda Screen
+        viewModelScope.launch {
+            authRepository.loginUser(
+                email = state.email,
+                password = state.password,
+            ).onEach { dataState ->
+                state = when (dataState) {
+                    is DataState.Loading -> state.copy(isLoading = dataState.isLoading)
+                    is DataState.Success -> state.copy(isLoggedIn = true)
+                    is DataState.Error -> state.copy(snackbarMessage = dataState.uiText)
                 }
-                is DataState.Error -> state = state.copy(snackbarMessage = dataState.uiText)
-            }
-        }.launchIn(viewModelScope)
+            }.collect()
+        }
     }
 }

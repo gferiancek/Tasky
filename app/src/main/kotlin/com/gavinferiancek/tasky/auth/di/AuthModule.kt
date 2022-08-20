@@ -4,10 +4,10 @@ import com.gavinferiancek.tasky.BuildConfig
 import com.gavinferiancek.tasky.auth.data.local.validation.EmailMatcherImpl
 import com.gavinferiancek.tasky.auth.data.remote.AuthApi
 import com.gavinferiancek.tasky.auth.data.repository.AuthRepositoryImpl
-import com.gavinferiancek.tasky.auth.domain.authorization.AuthManager
 import com.gavinferiancek.tasky.auth.domain.repository.AuthRepository
 import com.gavinferiancek.tasky.auth.domain.validation.EmailMatcher
 import com.gavinferiancek.tasky.auth.domain.validation.TextValidationManager
+import com.gavinferiancek.tasky.core.domain.datastore.UserStore
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -17,6 +17,7 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.create
+import javax.inject.Named
 import javax.inject.Singleton
 
 @Module
@@ -37,6 +38,7 @@ object AuthModule {
 
     @Provides
     @Singleton
+    @Named("AuthClient")
     fun provideOkHttpClient(): OkHttpClient {
         return OkHttpClient.Builder()
             .addInterceptor(
@@ -54,7 +56,7 @@ object AuthModule {
 
     @Provides
     @Singleton
-    fun provideLoginApi(client: OkHttpClient): AuthApi {
+    fun provideAuthApi(@Named("AuthClient") client: OkHttpClient): AuthApi {
         return Retrofit.Builder()
             .baseUrl(BuildConfig.BASE_URL)
             .client(client)
@@ -65,13 +67,7 @@ object AuthModule {
 
     @Provides
     @Singleton
-    fun provideAuthRepository(authApi: AuthApi): AuthRepository {
-        return AuthRepositoryImpl(authApi = authApi)
-    }
-
-    @Provides
-    @Singleton
-    fun provideAuthManager(authRepository: AuthRepository): AuthManager {
-        return AuthManager(authRepository = authRepository)
+    fun provideAuthRepository(authApi: AuthApi, userStore: UserStore): AuthRepository {
+        return AuthRepositoryImpl(authApi = authApi, userStore = userStore,)
     }
 }

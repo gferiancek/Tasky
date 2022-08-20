@@ -24,7 +24,9 @@ fun LoginScreen(
     state: LoginState,
     events: (LoginEvents) -> Unit,
     onNavigateToRegister: () -> Unit,
+    onNavigateToAgenda: () -> Unit,
 ) {
+    LaunchedEffect(state.isLoggedIn) { if (state.isLoggedIn) onNavigateToAgenda() }
     val spacing = LocalSpacing.current
     val scaffoldState = rememberScaffoldState()
 
