@@ -13,5 +13,6 @@ data class RegisterState(
     val shouldShowPassword: Boolean = false,
     val shouldDisplayErrors: Boolean = false,
     val isLoading: Boolean = false,
-    val snackbarMessage: UiText? = null,
+    val infoMessage: UiText? = null,
+    val hasCreatedAccount: Boolean = false,
 )
