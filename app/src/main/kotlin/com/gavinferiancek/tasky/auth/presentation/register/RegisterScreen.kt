@@ -4,42 +4,32 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import com.gavinferiancek.tasky.R
+import com.gavinferiancek.tasky.auth.presentation.components.AuthHeader
 import com.gavinferiancek.tasky.auth.presentation.components.EmailTextField
 import com.gavinferiancek.tasky.auth.presentation.components.NameTextField
 import com.gavinferiancek.tasky.auth.presentation.components.PasswordTextField
 import com.gavinferiancek.tasky.core.presentation.components.CardLayout
+import com.gavinferiancek.tasky.core.presentation.components.CircularIndeterminateProgressBar
+import com.gavinferiancek.tasky.core.presentation.components.showSnackbar
 import com.gavinferiancek.tasky.core.presentation.theme.LocalSpacing
 
 @Composable
 fun RegisterScreen(
     state: RegisterState,
+    scaffoldState: ScaffoldState,
     events: (RegisterEvents) -> Unit,
     onNavigateUp: () -> Unit,
 ) {
     val spacing = LocalSpacing.current
 
     CardLayout(
-        header = {
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .fillMaxHeight(0.15f),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center,
-            ) {
-                Text(
-                    text = stringResource(R.string.register_header),
-                    style = MaterialTheme.typography.h2,
-                    color = contentColorFor(backgroundColor = MaterialTheme.colors.background),
-                )
-            }
-        },
+        header = { AuthHeader(title = stringResource(id = R.string.register_header)) },
     ) {
+        CircularIndeterminateProgressBar(isLoading = state.isLoading)
         LazyColumn(
             modifier = Modifier.fillMaxSize(),
             verticalArrangement = Arrangement.SpaceBetween,
@@ -105,4 +95,11 @@ fun RegisterScreen(
             }
         }
     }
+    showSnackbar(
+        scaffoldState = scaffoldState,
+        message = state.infoMessage?.asString(),
+        label = stringResource(id = R.string.snackbar_action_ok),
+        onDismiss = { events(RegisterEvents.SnackbarDismissed) },
+        action = { if (state.hasCreatedAccount) onNavigateUp() }
+    )
 }

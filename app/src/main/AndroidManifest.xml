@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.gavinferiancek.tasky">
 
+    <uses-permission android:name="android.permission.INTERNET" />
     <application
         android:name=".TaskyApplication"
         android:allowBackup="true"

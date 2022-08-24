@@ -1,23 +1,30 @@
 <resources>
     <string name="app_name">Tasky</string>
 
-    <!-- Authentication -->
-    <string name="login_header">Welcome Back!</string>
-    <string name="register_header">Create Your Account</string>
-    <string name="name_placeholder">Full Name</string>
+    <!-- Authentication Core -->
     <string name="email_placeholder">Email</string>
+    <string name="error_email_blank">Email is required.</string>
+    <string name="error_unknown">An unknown error occurred.</string>
+    <string name="hide_password_content_description">Hide password</string>
+    <string name="password_digit_requirement">Contains 1 number</string>
+    <string name="password_length_requirement">Contains 9 characters</string>
+    <string name="password_lowercase_requirement">Contains 1 lowercase character</string>
     <string name="password_placeholder">Password</string>
+    <string name="password_uppercase_requirement">Contains 1 uppercase character</string>
+    <string name="show_password_content_description">Show password</string>
+    <string name="snackbar_action_ok">OK</string>
+    <!-- Login -->
+    <string name="login_button">LOG IN</string>
+    <string name="login_header">Welcome Back!</string>
     <string name="signup_base_text">DON\'T HAVE AN ACCOUNT?\u0020</string>
     <string name="signup_clickable_text">SIGN UP</string>
-    <string name="login_button">LOG IN</string>
-    <string name="register_button">GET STARTED</string>
-    <string name="show_password_content_description">Show password</string>
-    <string name="hide_password_content_description">Hide password</string>
+    <!-- Register -->
+    <string name="account_created">Account successfully created. Hit "OK" to return to the Login Screen.</string>
     <string name="error_invalid_name_length">Name must be between 2 and 50 characters.</string>
-    <string name="error_email_blank">Email is required.</string>
-    <string name="error_invalid_email">Email must follow format: example@domain.com</string>
-    <string name="password_length_requirement">Contains 9 characters</string>
-    <string name="password_digit_requirement">Contains 1 number</string>
-    <string name="password_lowercase_requirement">Contains 1 lowercase character</string>
-    <string name="password_uppercase_requirement">Contains 1 uppercase character</string>
+    <string name="name_placeholder">Full Name</string>
+    <string name="register_button">GET STARTED</string>
+    <string name="register_header">Create Your Account</string>
+
+    <!-- Agenda -->
+
 </resources>

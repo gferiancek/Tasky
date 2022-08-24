@@ -5,17 +5,21 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material.Button
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.ScaffoldState
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import com.gavinferiancek.tasky.R
+import com.gavinferiancek.tasky.auth.presentation.components.AuthHeader
 import com.gavinferiancek.tasky.auth.presentation.components.EmailTextField
 import com.gavinferiancek.tasky.auth.presentation.components.PasswordTextField
 import com.gavinferiancek.tasky.core.presentation.components.CardLayout
+import com.gavinferiancek.tasky.core.presentation.components.CircularIndeterminateProgressBar
+import com.gavinferiancek.tasky.core.presentation.components.showSnackbar
 import com.gavinferiancek.tasky.core.presentation.theme.LightBlue
 import com.gavinferiancek.tasky.core.presentation.theme.LocalSpacing
 import com.gavinferiancek.tasky.core.presentation.theme.muted
@@ -23,28 +27,18 @@ import com.gavinferiancek.tasky.core.presentation.theme.muted
 @Composable
 fun LoginScreen(
     state: LoginState,
+    scaffoldState: ScaffoldState,
     events: (LoginEvents) -> Unit,
     onNavigateToRegister: () -> Unit,
+    onNavigateToAgenda: () -> Unit,
 ) {
+    LaunchedEffect(state.isLoggedIn) { if (state.isLoggedIn) onNavigateToAgenda() }
     val spacing = LocalSpacing.current
 
     CardLayout(
-        header = {
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .fillMaxHeight(0.15f),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center,
-            ) {
-                Text(
-                    text = stringResource(id = R.string.login_header),
-                    style = MaterialTheme.typography.h2,
-                    color = MaterialTheme.colors.onBackground,
-                )
-            }
-        },
+        header = { AuthHeader(title = stringResource(id = R.string.login_header)) },
     ) {
+        CircularIndeterminateProgressBar(isLoading = state.isLoading)
         LazyColumn(
             modifier = Modifier.fillMaxSize(),
             verticalArrangement = Arrangement.SpaceBetween,
@@ -91,9 +85,7 @@ fun LoginScreen(
                         color = MaterialTheme.colors.muted
                     )
                     ClickableText(
-                        onClick = {
-                            onNavigateToRegister()
-                        },
+                        onClick = { onNavigateToRegister() },
                         text = AnnotatedString(
                             text = stringResource(id = R.string.signup_clickable_text),
                             spanStyle = SpanStyle(
@@ -107,4 +99,10 @@ fun LoginScreen(
             }
         }
     }
+    showSnackbar(
+        scaffoldState = scaffoldState,
+        message = state.infoMessage?.asString(),
+        label = stringResource(id = R.string.snackbar_action_ok),
+        onDismiss = { events(LoginEvents.SnackbarDismissed) },
+    )
 }
