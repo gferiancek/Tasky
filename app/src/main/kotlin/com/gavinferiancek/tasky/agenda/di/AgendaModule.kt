@@ -1,6 +1,6 @@
 package com.gavinferiancek.tasky.agenda.di
 
-import com.gavinferiancek.tasky.agenda.domain.localdate.DateTimeManager
+import com.gavinferiancek.tasky.agenda.domain.datetime.DateTimeManager
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
