@@ -7,7 +7,7 @@ import com.gavinferiancek.tasky.auth.data.repository.AuthRepositoryImpl
 import com.gavinferiancek.tasky.auth.domain.repository.AuthRepository
 import com.gavinferiancek.tasky.auth.domain.validation.EmailMatcher
 import com.gavinferiancek.tasky.auth.domain.validation.TextValidationManager
-import com.gavinferiancek.tasky.core.domain.datastore.UserStore
+import com.gavinferiancek.tasky.core.domain.preferences.UserPreferences
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -49,11 +49,11 @@ object AuthModule {
     @Singleton
     fun provideAuthRepository(
         authApi: AuthApi,
-        userStore: UserStore
+        userPreferences: UserPreferences
     ): AuthRepository {
         return AuthRepositoryImpl(
             authApi = authApi,
-            userStore = userStore,
+            userPreferences = userPreferences,
         )
     }
 }

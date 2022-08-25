@@ -1,18 +1,14 @@
 package com.gavinferiancek.tasky.core.di
 
 import android.content.Context
-import com.gavinferiancek.tasky.BuildConfig
-import com.gavinferiancek.tasky.core.data.local.datastore.UserStoreImpl
-import com.gavinferiancek.tasky.core.domain.datastore.UserStore
+import com.gavinferiancek.tasky.core.data.local.preferences.UserPreferencesImpl
+import com.gavinferiancek.tasky.core.data.remote.interceptor.AuthorizationInterceptor
+import com.gavinferiancek.tasky.core.domain.preferences.UserPreferences
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.launch
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import javax.inject.Singleton
@@ -23,29 +19,20 @@ object CoreModule {
 
     @Provides
     @Singleton
-    fun provideDataStore(@ApplicationContext appContext: Context): UserStore {
-        return UserStoreImpl(context = appContext)
+    fun provideUserPreferences(@ApplicationContext appContext: Context): UserPreferences {
+        return UserPreferencesImpl(context = appContext)
     }
 
     @Provides
     @Singleton
-    fun provideOkHttpClient(userStore: UserStore): OkHttpClient {
-        var token = ""
-        CoroutineScope(Dispatchers.IO).launch {
-            token = userStore.getToken().first()
-        }
+    fun provideOkHttpClient(userPreferences: UserPreferences): OkHttpClient {
         return OkHttpClient.Builder()
             .addInterceptor(
                 HttpLoggingInterceptor().apply {
                     level = HttpLoggingInterceptor.Level.BODY
                 }
             )
-            .addInterceptor { chain ->
-                val request = chain.request().newBuilder()
-                    .addHeader("x-api-key", BuildConfig.API_KEY)
-                    .addHeader("Authorization", "Bearer $token")
-                chain.proceed(request.build())
-            }
+            .addInterceptor(AuthorizationInterceptor(userPreferences))
             .build()
     }
 }
