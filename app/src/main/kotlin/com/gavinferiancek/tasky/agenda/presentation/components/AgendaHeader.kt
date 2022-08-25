@@ -20,6 +20,13 @@ import com.vanpra.composematerialdialogs.datetime.date.datepicker
 import com.vanpra.composematerialdialogs.rememberMaterialDialogState
 import java.time.LocalDate
 
+/**
+ * Composable that displays a header for the AgendaScreen.
+ * @param modifier Modifier applied to [Row] that encapsulates AgendaHeader.
+ * @param initialDate Starting date that is used as a basis for the [TextButton]'s text as well
+ * as the default selected date for the [datepicker].
+ * @param onSelectDate Lambda to pass [LocalDate] selected in [datepicker] to parent Composable.
+ */
 @Composable
 fun AgendaHeader(
     modifier: Modifier = Modifier,
