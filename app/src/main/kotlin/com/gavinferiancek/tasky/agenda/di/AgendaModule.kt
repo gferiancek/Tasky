@@ -1,6 +1,6 @@
 package com.gavinferiancek.tasky.agenda.di
 
-import com.gavinferiancek.tasky.agenda.domain.localdate.LocalDateManager
+import com.gavinferiancek.tasky.agenda.domain.localdate.DateTimeManager
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -13,7 +13,7 @@ object AgendaModule {
 
     @Singleton
     @Provides
-    fun provideLocalDateManager(): LocalDateManager {
-        return LocalDateManager()
+    fun provideDateTimeManager(): DateTimeManager {
+        return DateTimeManager()
     }
 }

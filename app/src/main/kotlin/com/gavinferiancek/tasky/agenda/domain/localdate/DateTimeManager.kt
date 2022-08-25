@@ -2,7 +2,7 @@ package com.gavinferiancek.tasky.agenda.domain.localdate
 
 import java.time.LocalDate
 
-class LocalDateManager {
+class DateTimeManager {
 
     fun generateDayList(
         currentDay: LocalDate,
