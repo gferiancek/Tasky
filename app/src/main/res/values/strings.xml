@@ -26,5 +26,8 @@
     <string name="register_header">Create Your Account</string>
 
     <!-- Agenda -->
+    <string name="date_yesterday">Yesterday</string>
+    <string name="date_today">Today</string>
+    <string name="date_tomorrow">Tomorrow</string>
 
 </resources>

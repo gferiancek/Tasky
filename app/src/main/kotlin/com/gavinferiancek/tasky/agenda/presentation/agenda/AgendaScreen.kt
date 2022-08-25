@@ -10,7 +10,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.gavinferiancek.tasky.agenda.domain.datetime.formatZonedDate
+import com.gavinferiancek.tasky.agenda.domain.datetime.DateTimeManager.Companion.formatZonedDate
 import com.gavinferiancek.tasky.agenda.presentation.components.AgendaHeader
 import com.gavinferiancek.tasky.agenda.presentation.components.DaySelector
 import com.gavinferiancek.tasky.agenda.presentation.components.TimeNeedle
@@ -44,10 +44,12 @@ fun AgendaScreen(
         Spacer(modifier = Modifier.height(spacing.large))
 
         Text(
-            text = "Today",
+            text = state.listHeader.asString(),
             color = MaterialTheme.colors.onSurface,
             style = MaterialTheme.typography.h2,
         )
+        Spacer(modifier = Modifier.height(spacing.medium))
+
         LazyColumn(
             modifier = Modifier
                 .fillMaxHeight()

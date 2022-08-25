@@ -19,6 +19,7 @@ class AgendaViewModel @Inject constructor(
         // TODO GET AgendaItems
         state = state.copy(
             dayList = dateManager.generateDayList(state.initialDate),
+            listHeader = dateManager.generateListHeader(state.initialDate),
             needleIndex = dateManager.calculateNeedleIndex(state.items), // TODO Replace state.items with fetched data
         )
     }
@@ -30,6 +31,7 @@ class AgendaViewModel @Inject constructor(
                 state.copy(
                     initialDate = event.date,
                     dayList = dateManager.generateDayList(event.date),
+                    listHeader = dateManager.generateListHeader(event.date),
                     selectedDayIndex = 0, // Select the first day in DaySelector
                     needleIndex = dateManager.calculateNeedleIndex(state.items), // TODO Replace state.items with fetched data
                 )
@@ -37,6 +39,7 @@ class AgendaViewModel @Inject constructor(
             is AgendaEvents.UpdateSelectedDay -> {
                 // TODO GET AgendaItems for selectedDay
                 state.copy(
+                    listHeader = dateManager.generateListHeader(state.dayList[event.index]),
                     selectedDayIndex = event.index,
                     needleIndex = dateManager.calculateNeedleIndex(state.items), // TODO Replace state.items with fetched data
                 )
