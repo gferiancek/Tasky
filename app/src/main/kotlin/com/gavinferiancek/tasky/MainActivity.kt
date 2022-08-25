@@ -5,18 +5,15 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.animation.ExperimentalAnimationApi
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.Scaffold
 import androidx.compose.material.ScaffoldState
-import androidx.compose.material.Text
 import androidx.compose.material.rememberScaffoldState
-import androidx.compose.runtime.collectAsState
-import androidx.compose.ui.Modifier
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
+import com.gavinferiancek.tasky.agenda.presentation.agenda.AgendaScreen
+import com.gavinferiancek.tasky.agenda.presentation.agenda.AgendaViewModel
 import com.gavinferiancek.tasky.auth.presentation.login.LoginScreen
 import com.gavinferiancek.tasky.auth.presentation.login.LoginViewModel
 import com.gavinferiancek.tasky.auth.presentation.register.RegisterScreen
@@ -119,11 +116,10 @@ fun NavGraphBuilder.addAgendaScreen(
     composable(
         route = Screens.Agenda.route,
     ) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize(),
-        ) {
-            Text("This is the Agenda Screen!")
-        }
+        val viewModel: AgendaViewModel = hiltViewModel()
+        AgendaScreen(
+            state = viewModel.state,
+            events = viewModel::onTriggerEvent,
+        )
     }
 }

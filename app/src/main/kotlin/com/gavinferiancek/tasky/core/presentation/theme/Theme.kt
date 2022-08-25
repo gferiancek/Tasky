@@ -45,6 +45,9 @@ private val LightColorPalette = lightColors(
 val Colors.muted: Color
     get() = Muted
 
+val Colors.selectedDay: Color
+    get() = Yellow
+
 @Composable
 fun TaskyTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Composable () -> Unit) {
     val colors = if (darkTheme) {
