@@ -38,7 +38,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         installSplashScreen().apply {
             setKeepOnScreenCondition {
-                viewModel.isLoading.value
+                viewModel.state.isLoading
             }
         }
         setContent {
@@ -50,7 +50,7 @@ class MainActivity : ComponentActivity() {
                 ) {
                     AnimatedNavHost(
                         navController = navController,
-                        startDestination = viewModel.startDestination.collectAsState().value,
+                        startDestination = viewModel.state.startDestination,
                         builder = {
                             addLoginScreen(
                                 navController = navController,

@@ -1,5 +1,8 @@
 package com.gavinferiancek.tasky
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gavinferiancek.tasky.auth.domain.repository.AuthRepository
@@ -15,18 +18,15 @@ class MainViewModel @Inject constructor(
     repository: AuthRepository,
 ) : ViewModel() {
 
-    private val _isLoading = MutableStateFlow(false)
-    val isLoading = _isLoading.asStateFlow()
-
-    private val _startDestination = MutableStateFlow(Screens.Login.route)
-    val startDestination = _startDestination.asStateFlow()
+    var state by mutableStateOf(MainState())
+        private set
 
     init {
         viewModelScope.launch {
-            _isLoading.value = true
+            state = state.copy(isLoading = true)
             repository.authenticateToken()
-                .onSuccess { _startDestination.value = Screens.Agenda.route }
-            _isLoading.value = false
+                .onSuccess { state = state.copy(startDestination = Screens.Agenda.route) }
+            state = state.copy(isLoading = false)
         }
     }
 }
