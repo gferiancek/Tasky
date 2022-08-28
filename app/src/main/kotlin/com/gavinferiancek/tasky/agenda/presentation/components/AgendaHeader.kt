@@ -13,6 +13,8 @@ import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import com.gavinferiancek.tasky.R
 import com.gavinferiancek.tasky.core.presentation.theme.LocalSpacing
 import com.vanpra.composematerialdialogs.MaterialDialog
 import com.vanpra.composematerialdialogs.datetime.date.DatePickerDefaults
@@ -56,7 +58,7 @@ fun AgendaHeader(
             )
             Icon(
                 imageVector = Icons.Default.ArrowDropDown,
-                contentDescription = "",
+                contentDescription = stringResource(R.string.header_dropdown_content_description),
                 tint = MaterialTheme.colors.onPrimary,
             )
         }
