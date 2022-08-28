@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name">Tasky</string>
+    <string name="action_ok">OK</string>
+    <string name="action_cancel">Cancel</string>
 
     <!-- Authentication Core -->
     <string name="email_placeholder">Email</string>
@@ -12,7 +14,6 @@
     <string name="password_placeholder">Password</string>
     <string name="password_uppercase_requirement">Contains 1 uppercase character</string>
     <string name="show_password_content_description">Show password</string>
-    <string name="snackbar_action_ok">OK</string>
     <!-- Login -->
     <string name="login_button">LOG IN</string>
     <string name="login_header">Welcome Back!</string>

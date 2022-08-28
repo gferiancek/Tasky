@@ -1,8 +1,10 @@
 package com.gavinferiancek.tasky.agenda.presentation.components
 
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.itemsIndexed
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import java.time.LocalDate
@@ -21,21 +23,27 @@ fun DaySelector(
     selectedDay: Int,
     onSelectDay: (Int) -> Unit,
 ) {
-    Row(
+    LazyVerticalGrid(
+        columns = GridCells.Fixed(days.count()),
         modifier = modifier
             .fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceEvenly,
     ) {
-        days.forEachIndexed { currentDay, day ->
+        itemsIndexed(
+            items = days,
+            key = { _, day ->
+                day.dayOfYear
+            }
+        ) { dayIndex, day ->
             DayChip(
-                modifier = Modifier
-                    .weight(1f),
                 day = day,
-                index = currentDay,
-                isSelected = currentDay == selectedDay,
+                index = dayIndex,
+                isSelected = selectedDay == dayIndex,
                 onSelectDay = { index ->
-                    onSelectDay(index)
-                },
+                    if (index != selectedDay) {
+                        onSelectDay(index)
+                    }
+                }
             )
         }
     }

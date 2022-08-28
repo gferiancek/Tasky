@@ -102,7 +102,7 @@ fun LoginScreen(
     showSnackbar(
         scaffoldState = scaffoldState,
         message = state.infoMessage?.asString(),
-        label = stringResource(id = R.string.snackbar_action_ok),
+        label = stringResource(id = R.string.action_ok),
         onDismiss = { events(LoginEvents.SnackbarDismissed) },
     )
 }

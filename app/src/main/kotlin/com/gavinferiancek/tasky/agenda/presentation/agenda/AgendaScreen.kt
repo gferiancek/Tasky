@@ -36,6 +36,7 @@ fun AgendaScreen(
         }
     ) {
         DaySelector(
+            modifier = Modifier.fillMaxWidth(),
             days = state.dayList,
             selectedDay = state.selectedDayIndex,
             onSelectDay = { index ->
@@ -56,10 +57,11 @@ fun AgendaScreen(
             modifier = Modifier
                 .fillMaxHeight()
         ) {
-            itemsIndexed(state.items) { index, item ->
+            itemsIndexed(
+                items = state.items,
+            ) { index, item ->
                 // TODO Replace Text with AgendaItem Composable
-                val formattedDate = remember { item.startTime.format(agendaItemFormatter) }
-                Text(text = formattedDate)
+                Text(text = remember { item.startTime.format(agendaItemFormatter) })
                 Spacer(modifier = Modifier.height(spacing.small))
 
                 if (state.needleIndex == index) TimeNeedle(modifier = Modifier.fillMaxWidth())

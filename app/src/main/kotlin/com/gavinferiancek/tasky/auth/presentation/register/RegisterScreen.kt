@@ -98,7 +98,7 @@ fun RegisterScreen(
     showSnackbar(
         scaffoldState = scaffoldState,
         message = state.infoMessage?.asString(),
-        label = stringResource(id = R.string.snackbar_action_ok),
+        label = stringResource(id = R.string.action_ok),
         onDismiss = { events(RegisterEvents.SnackbarDismissed) },
         action = { if (state.hasCreatedAccount) onNavigateUp() }
     )

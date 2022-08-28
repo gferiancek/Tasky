@@ -66,8 +66,8 @@ fun AgendaHeader(
     MaterialDialog(
         dialogState = dialogState,
         buttons = {
-            positiveButton("Ok")
-            negativeButton("Cancel")
+            positiveButton(stringResource(R.string.action_ok))
+            negativeButton(stringResource(R.string.action_cancel))
         }
     ) {
         datepicker(

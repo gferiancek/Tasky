@@ -7,12 +7,15 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.gavinferiancek.tasky.core.presentation.theme.LocalSpacing
 import com.gavinferiancek.tasky.core.presentation.theme.muted
 import com.gavinferiancek.tasky.core.presentation.theme.selectedDay
 import java.time.LocalDate
+import java.time.format.TextStyle
+import java.util.*
 
 /**
  * Composable that displays the name (Abbreviated as 1st letter of day) and day of the month of
@@ -57,7 +60,12 @@ fun DayChip(
             verticalArrangement = Arrangement.Center,
         ) {
             Text(
-                text = day.dayOfWeek.name.substring(0, 1),
+                text = remember {
+                    day.dayOfWeek.getDisplayName(
+                        TextStyle.NARROW,
+                        Locale.getDefault()
+                    )
+                },
                 color = if (isSelected) MaterialTheme.colors.onSurface else MaterialTheme.colors.muted,
             )
             Text(
