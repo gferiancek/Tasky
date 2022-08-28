@@ -14,6 +14,6 @@ object AgendaModule {
     @Singleton
     @Provides
     fun provideDateTimeManager(): DateTimeManager {
-        return DateTimeManager()
+        return DateTimeManager
     }
 }

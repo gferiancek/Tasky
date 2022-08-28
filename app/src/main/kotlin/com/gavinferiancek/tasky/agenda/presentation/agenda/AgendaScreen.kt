@@ -9,13 +9,14 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import com.gavinferiancek.tasky.agenda.domain.datetime.DateTimeManager.Companion.formatZonedDate
 import com.gavinferiancek.tasky.agenda.presentation.components.AgendaHeader
 import com.gavinferiancek.tasky.agenda.presentation.components.DaySelector
 import com.gavinferiancek.tasky.agenda.presentation.components.TimeNeedle
 import com.gavinferiancek.tasky.core.presentation.components.CardLayout
 import com.gavinferiancek.tasky.core.presentation.theme.LocalSpacing
+import java.time.format.DateTimeFormatter
 
 @Composable
 fun AgendaScreen(
@@ -50,13 +51,15 @@ fun AgendaScreen(
         )
         Spacer(modifier = Modifier.height(spacing.medium))
 
+        val agendaItemFormatter = remember { DateTimeFormatter.ofPattern("MMM, HH:mm") }
         LazyColumn(
             modifier = Modifier
                 .fillMaxHeight()
         ) {
             itemsIndexed(state.items) { index, item ->
                 // TODO Replace Text with AgendaItem Composable
-                Text(text = formatZonedDate(item.startTime))
+                val formattedDate = remember { item.startTime.format(agendaItemFormatter) }
+                Text(text = formattedDate)
                 Spacer(modifier = Modifier.height(spacing.small))
 
                 if (state.needleIndex == index) TimeNeedle(modifier = Modifier.fillMaxWidth())
