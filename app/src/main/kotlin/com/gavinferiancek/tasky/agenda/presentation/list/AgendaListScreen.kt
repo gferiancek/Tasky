@@ -1,4 +1,4 @@
-package com.gavinferiancek.tasky.agenda.presentation.agenda
+package com.gavinferiancek.tasky.agenda.presentation.list
 
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -20,8 +20,8 @@ import java.time.format.DateTimeFormatter
 
 @Composable
 fun AgendaScreen(
-    state: AgendaState,
-    events: (AgendaEvents) -> Unit,
+    state: AgendaListState,
+    events: (AgendaListEvents) -> Unit,
 ) {
     val spacing = LocalSpacing.current
 
@@ -30,7 +30,7 @@ fun AgendaScreen(
             AgendaHeader(
                 initialDate = state.initialDate,
                 onSelectDate = { date ->
-                    events(AgendaEvents.UpdateInitialDate(date))
+                    events(AgendaListEvents.UpdateInitialDate(date))
                 }
             )
         }
@@ -40,7 +40,7 @@ fun AgendaScreen(
             days = state.dayList,
             selectedDay = state.selectedDayIndex,
             onSelectDay = { index ->
-                events(AgendaEvents.UpdateSelectedDay(index))
+                events(AgendaListEvents.UpdateSelectedDay(index))
             }
         )
         Spacer(modifier = Modifier.height(spacing.large))

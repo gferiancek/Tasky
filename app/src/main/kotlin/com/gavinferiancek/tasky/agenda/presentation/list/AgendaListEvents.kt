@@ -1,14 +1,14 @@
-package com.gavinferiancek.tasky.agenda.presentation.agenda
+package com.gavinferiancek.tasky.agenda.presentation.list
 
 import java.time.LocalDate
 
-sealed class AgendaEvents {
+sealed class AgendaListEvents {
 
     data class UpdateInitialDate(
         val date: LocalDate,
-    ) : AgendaEvents()
+    ) : AgendaListEvents()
 
     data class UpdateSelectedDay(
         val index: Int,
-    ) : AgendaEvents()
+    ) : AgendaListEvents()
 }

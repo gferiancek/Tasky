@@ -1,4 +1,4 @@
-package com.gavinferiancek.tasky.agenda.presentation.agenda
+package com.gavinferiancek.tasky.agenda.presentation.list
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -13,10 +13,10 @@ import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 
 @HiltViewModel
-class AgendaViewModel @Inject constructor(
+class AgendaListViewModel @Inject constructor(
     private val dateManager: DateTimeManager,
 ) : ViewModel() {
-    var state by mutableStateOf(AgendaState())
+    var state by mutableStateOf(AgendaListState())
         private set
 
     init {
@@ -28,9 +28,9 @@ class AgendaViewModel @Inject constructor(
         )
     }
 
-    fun onTriggerEvent(event: AgendaEvents) {
+    fun onTriggerEvent(event: AgendaListEvents) {
         state = when (event) {
-            is AgendaEvents.UpdateInitialDate -> {
+            is AgendaListEvents.UpdateInitialDate -> {
                 // TODO GET AgendaItems for new initialDate
                 state.copy(
                     initialDate = event.date,
@@ -40,7 +40,7 @@ class AgendaViewModel @Inject constructor(
                     needleIndex = dateManager.calculateNeedleIndex(state.items), // TODO Replace state.items with fetched data
                 )
             }
-            is AgendaEvents.UpdateSelectedDay -> {
+            is AgendaListEvents.UpdateSelectedDay -> {
                 // TODO GET AgendaItems for selectedDay
                 state.copy(
                     listHeader = generateListHeader(state.dayList[event.index]),

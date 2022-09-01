@@ -1,4 +1,4 @@
-package com.gavinferiancek.tasky.agenda.presentation.agenda
+package com.gavinferiancek.tasky.agenda.presentation.list
 
 import com.gavinferiancek.tasky.R
 import com.gavinferiancek.tasky.agenda.domain.model.AgendaItem
@@ -9,7 +9,7 @@ import com.gavinferiancek.tasky.core.util.UiText
 import java.time.LocalDate
 import java.time.ZonedDateTime
 
-data class AgendaState(
+data class AgendaListState(
     val items: List<AgendaItem> = listOf(
         // Fake data
         Event(startTime = ZonedDateTime.now().minusHours(1)),
