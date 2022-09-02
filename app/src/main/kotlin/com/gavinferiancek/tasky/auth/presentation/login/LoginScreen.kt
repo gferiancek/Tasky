@@ -38,7 +38,7 @@ fun LoginScreen(
     CardLayout(
         header = { AuthHeader(title = stringResource(id = R.string.login_header)) },
     ) {
-        CircularIndeterminateProgressBar(isLoading = state.isLoading)
+        if (state.isLoading) CircularIndeterminateProgressBar(modifier = Modifier.fillMaxWidth())
         LazyColumn(
             modifier = Modifier.fillMaxSize(),
             verticalArrangement = Arrangement.SpaceBetween,

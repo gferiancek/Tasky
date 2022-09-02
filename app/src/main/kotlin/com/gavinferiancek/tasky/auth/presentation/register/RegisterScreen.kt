@@ -29,7 +29,7 @@ fun RegisterScreen(
     CardLayout(
         header = { AuthHeader(title = stringResource(id = R.string.register_header)) },
     ) {
-        CircularIndeterminateProgressBar(isLoading = state.isLoading)
+        if(state.isLoading) CircularIndeterminateProgressBar(modifier = Modifier.fillMaxWidth())
         LazyColumn(
             modifier = Modifier.fillMaxSize(),
             verticalArrangement = Arrangement.SpaceBetween,

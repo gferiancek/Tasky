@@ -22,18 +22,16 @@ import java.util.*
  * the provided [LocalDate].
  * @param modifier Modifier applied to the Chip.
  * @param day [LocalDate] representation of the day to display.
- * @param index Position in the [DaySelector]'s List of [LocalDate]s
  * @param isSelected Determines whether this [DayChip] is the currently selected Day.
- * @param onSelectDay Lambda to pass index of clicked [DayChip] to parent Composable.
+ * @param onSelectDay Lambda to pass clicked [DayChip]'s [LocalDate] to parent Composable.
  */
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun DayChip(
     modifier: Modifier = Modifier,
     day: LocalDate,
-    index: Int,
     isSelected: Boolean,
-    onSelectDay: (Int) -> Unit,
+    onSelectDay: (LocalDate) -> Unit,
 ) {
     val spacing = LocalSpacing.current
 
@@ -43,7 +41,7 @@ fun DayChip(
                 start = spacing.extraSmall,
                 end = spacing.extraSmall,
             ),
-        onClick = { onSelectDay(index) },
+        onClick = { onSelectDay(day) },
         shape = CircleShape,
         colors = ChipDefaults.chipColors(
             backgroundColor = if (isSelected) MaterialTheme.colors.selectedDay else MaterialTheme.colors.surface,
@@ -60,7 +58,7 @@ fun DayChip(
             verticalArrangement = Arrangement.Center,
         ) {
             Text(
-                text = remember {
+                text = remember(day) {
                     day.dayOfWeek.getDisplayName(
                         TextStyle.NARROW,
                         Locale.getDefault()

@@ -9,6 +9,6 @@ sealed class AgendaListEvents {
     ) : AgendaListEvents()
 
     data class UpdateSelectedDay(
-        val index: Int,
+        val day: LocalDate,
     ) : AgendaListEvents()
 }
