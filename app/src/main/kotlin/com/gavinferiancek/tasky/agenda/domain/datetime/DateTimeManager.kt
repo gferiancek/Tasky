@@ -1,11 +1,7 @@
 package com.gavinferiancek.tasky.agenda.domain.datetime
 
-import com.gavinferiancek.tasky.R
 import com.gavinferiancek.tasky.agenda.domain.model.AgendaItem
-import com.gavinferiancek.tasky.core.util.UiText
-import java.time.LocalDate
-import java.time.ZonedDateTime
-import java.time.format.DateTimeFormatter
+import java.time.*
 
 object DateTimeManager {
 
@@ -15,11 +11,15 @@ object DateTimeManager {
         return (0..5).map { currentDay.plusDays(it.toLong()) }
     }
 
-    fun calculateNeedleIndex(
+    fun groupAgendaItemByTime(
         list: List<AgendaItem>,
-    ): Int {
+    ): Map<String, List<AgendaItem>> {
         val currentTime = ZonedDateTime.now()
-        return list.indexOfLast { it.startTime.isBefore(currentTime) }
-        // return agendaItems.groupBy { it.startTime.isBefore(currentTime) }.values
+        return list.groupBy {
+            when {
+                it.startTime.isAfter(currentTime) -> "futureItems"
+                else -> "pastItems"
+            }
+        }
     }
 }
