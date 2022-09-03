@@ -87,6 +87,10 @@ dependencies {
     // LeakCanary
     implementation "com.squareup.leakcanary:leakcanary-android:2.9.1"
 
+    // Moshi
+    implementation "com.squareup.moshi:moshi-adapters:1.13.0"
+    kapt "com.squareup.moshi:moshi-kotlin-codegen:1.13.0"
+
     // Retrofit
     implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
     implementation "com.squareup.retrofit2:converter-moshi:$retrofit_version"

@@ -28,6 +28,7 @@ fun DaySelector(
         modifier = modifier
             .fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceEvenly,
+        userScrollEnabled = false,
     ) {
         items(
             items = days,

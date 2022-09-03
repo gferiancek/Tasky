@@ -22,4 +22,29 @@ object DateTimeManager {
             }
         }
     }
+
+    fun millisToZonedDateTime(
+        millis: Long,
+    ): ZonedDateTime {
+        return ZonedDateTime.ofInstant(
+            Instant.ofEpochMilli(millis),
+            ZoneOffset.systemDefault(),
+        )
+    }
+
+    /**
+     * AgendaHeader.kt contains a library that uses LocalDate for a DatePicker dialog, so all of the UI involving
+     * selecting the day to display uses LocalDate to conform to that standard.  However, when communicating with
+     * the API we need to provide a Unix timestamp. We first convert to ZonedDateTime to make sure our timestamp will
+     * be for the intended day. (API takes timestamp and timezone id to calculate the returned Agenda's day.)
+     */
+    fun localDateToMillis(
+        date: LocalDate
+    ): Long {
+        return ZonedDateTime.of(
+            date,
+            LocalTime.now(),
+            ZoneOffset.systemDefault()
+        ).toInstant().toEpochMilli()
+    }
 }

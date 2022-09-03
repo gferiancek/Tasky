@@ -12,8 +12,8 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
-import com.gavinferiancek.tasky.agenda.presentation.agenda.AgendaScreen
-import com.gavinferiancek.tasky.agenda.presentation.agenda.AgendaViewModel
+import com.gavinferiancek.tasky.agenda.presentation.list.AgendaScreen
+import com.gavinferiancek.tasky.agenda.presentation.list.AgendaListViewModel
 import com.gavinferiancek.tasky.auth.presentation.login.LoginScreen
 import com.gavinferiancek.tasky.auth.presentation.login.LoginViewModel
 import com.gavinferiancek.tasky.auth.presentation.register.RegisterScreen
@@ -116,7 +116,7 @@ fun NavGraphBuilder.addAgendaScreen(
     composable(
         route = Screens.Agenda.route,
     ) {
-        val viewModel: AgendaViewModel = hiltViewModel()
+        val viewModel: AgendaListViewModel = hiltViewModel()
         AgendaScreen(
             state = viewModel.state,
             events = viewModel::onTriggerEvent,
