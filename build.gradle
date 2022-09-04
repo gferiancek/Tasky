@@ -6,6 +6,7 @@ buildscript {
         retrofit_version = "2.9.0"
         okhttp3_version = "5.0.0-alpha.10"
         material_dialogs_version = "0.8.1-rc"
+        room_version = '2.4.3'
     }
 
     dependencies {

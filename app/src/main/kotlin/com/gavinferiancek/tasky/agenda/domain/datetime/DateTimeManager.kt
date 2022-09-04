@@ -32,6 +32,13 @@ object DateTimeManager {
         )
     }
 
+    fun millisToDateString(
+        millis: Long
+    ): String {
+        // Returns "YYYY-MM-DD". UI uses LocalDate so we can easily search DB for entries for a given date.
+        return millisToZonedDateTime(millis).toLocalDate().toString()
+    }
+
     /**
      * AgendaHeader.kt contains a library that uses LocalDate for a DatePicker dialog, so all of the UI involving
      * selecting the day to display uses LocalDate to conform to that standard.  However, when communicating with

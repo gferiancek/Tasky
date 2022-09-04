@@ -1,7 +1,7 @@
 package com.gavinferiancek.tasky.agenda.data.remote.list
 
+import com.gavinferiancek.tasky.agenda.data.local.database.entity.EventEntity
 import com.gavinferiancek.tasky.agenda.domain.datetime.DateTimeManager
-import com.gavinferiancek.tasky.agenda.domain.model.Event
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
@@ -29,21 +29,20 @@ data class EventResponseDto(
     val photos: List<PhotoResponseDto>
 )
 
-fun EventResponseDto.toEvent(): Event {
-    return Event(
-        id = id,
+fun EventResponseDto.toEventEntity(): EventEntity {
+    return EventEntity(
+        eventId = id,
+        date = DateTimeManager.millisToDateString(startTime),
         title = title,
         description = description,
-        startTime = DateTimeManager.millisToZonedDateTime(startTime),
-        remindAt = DateTimeManager.millisToZonedDateTime(remindAt),
-        endTime = DateTimeManager.millisToZonedDateTime(endTime),
+        startTime = startTime,
+        remindAt = remindAt,
+        endTime = endTime,
         hostId = hostId,
         isCreator = isCreator,
-        attendees = attendees.toAttendeeList(),
-        photos = photos.toPhotoList(),
     )
 }
 
-fun List<EventResponseDto>.toEventList(): List<Event> {
-    return map { it.toEvent() }
+fun List<EventResponseDto>.toEventEntityList(): List<EventEntity> {
+    return map { it.toEventEntity() }
 }

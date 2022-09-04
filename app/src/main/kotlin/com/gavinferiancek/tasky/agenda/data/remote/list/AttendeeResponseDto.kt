@@ -1,7 +1,6 @@
 package com.gavinferiancek.tasky.agenda.data.remote.list
 
-import com.gavinferiancek.tasky.agenda.domain.datetime.DateTimeManager
-import com.gavinferiancek.tasky.agenda.domain.model.Attendee
+import com.gavinferiancek.tasky.agenda.data.local.database.entity.AttendeeEntity
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
@@ -21,17 +20,17 @@ data class AttendeeResponseDto(
     val remindAt: Long,
 )
 
-fun AttendeeResponseDto.toAttendee(): Attendee {
-    return Attendee(
+fun AttendeeResponseDto.toAttendeeEntity(): AttendeeEntity {
+    return AttendeeEntity(
+        userId = userId,
         email = email,
         fullName = fullName,
-        userId = userId,
-        eventId = eventId,
+        eventIdRef = eventId,
         isGoing = isGoing,
-        remindAt = DateTimeManager.millisToZonedDateTime(remindAt),
+        remindAt = remindAt,
     )
 }
 
-fun List<AttendeeResponseDto>.toAttendeeList(): List<Attendee> {
-    return map { it.toAttendee() }
+fun List<AttendeeResponseDto>.toAttendeeEntityList(): List<AttendeeEntity> {
+    return map { it.toAttendeeEntity() }
 }

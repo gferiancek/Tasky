@@ -1,7 +1,7 @@
 package com.gavinferiancek.tasky.agenda.data.remote.list
 
+import com.gavinferiancek.tasky.agenda.data.local.database.entity.TaskEntity
 import com.gavinferiancek.tasky.agenda.domain.datetime.DateTimeManager
-import com.gavinferiancek.tasky.agenda.domain.model.Task
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
@@ -21,17 +21,18 @@ data class TaskResponseDto(
     val isDone: Boolean
 )
 
-fun TaskResponseDto.toTask(): Task {
-    return Task(
+fun TaskResponseDto.toTaskEntity(): TaskEntity {
+    return TaskEntity(
         id = id,
+        date = DateTimeManager.millisToDateString(startTime),
         title = title,
         description = description,
-        startTime = DateTimeManager.millisToZonedDateTime(startTime),
-        remindAt = DateTimeManager.millisToZonedDateTime(remindAt),
+        startTime = startTime,
+        remindAt = remindAt,
         isDone = isDone,
     )
 }
 
-fun List<TaskResponseDto>.toTaskList(): List<Task> {
-    return map { it.toTask() }
+fun List<TaskResponseDto>.toTaskEntityList(): List<TaskEntity> {
+    return map { it.toTaskEntity() }
 }

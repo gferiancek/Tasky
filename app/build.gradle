@@ -97,6 +97,11 @@ dependencies {
     implementation "com.squareup.okhttp3:okhttp:$okhttp3_version"
     implementation "com.squareup.okhttp3:logging-interceptor:$okhttp3_version"
 
+    // Room
+    implementation "androidx.room:room-runtime:$room_version"
+    kapt "androidx.room:room-compiler:$room_version"
+    implementation "androidx.room:room-ktx:$room_version"
+
     // Testing
     androidTestImplementation "androidx.test:runner:1.4.0"
     androidTestImplementation "androidx.compose.ui:ui-test-junit4:$compose_version"

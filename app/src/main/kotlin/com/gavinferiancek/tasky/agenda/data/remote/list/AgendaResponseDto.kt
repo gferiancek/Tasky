@@ -1,6 +1,5 @@
 package com.gavinferiancek.tasky.agenda.data.remote.list
 
-import com.gavinferiancek.tasky.agenda.domain.model.AgendaItem
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
@@ -13,11 +12,3 @@ data class AgendaResponseDto(
     @Json(name = "reminders")
     val reminders: List<ReminderResponseDto>
 )
-
-fun AgendaResponseDto.toAgendaItemList(): List<AgendaItem> {
-    return buildList {
-        addAll(events.toEventList())
-        addAll(tasks.toTaskList())
-        addAll(reminders.toReminderList())
-    }.sortedBy { it.startTime }
-}
