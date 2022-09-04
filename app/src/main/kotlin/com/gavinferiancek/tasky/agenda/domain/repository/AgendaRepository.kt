@@ -1,17 +1,11 @@
 package com.gavinferiancek.tasky.agenda.domain.repository
 
 import com.gavinferiancek.tasky.agenda.domain.model.AgendaItem
+import kotlinx.coroutines.flow.Flow
 
 interface AgendaRepository {
 
-    // TODO Change to flow once database is implemented
-    suspend fun getAgenda(
-        time: Long,
-    ): Result<List<AgendaItem>>
+    fun getCachedAgendaForDate(date: String): Flow<List<AgendaItem>>
 
-    suspend fun deleteEvent()
-
-    suspend fun deleteTask()
-
-    suspend fun deleteReminder()
+    suspend fun fetchAgendaForDate(timestamp: Long): Result<Unit>
 }

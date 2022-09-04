@@ -11,6 +11,8 @@ import com.gavinferiancek.tasky.agenda.domain.repository.AgendaRepository
 import com.gavinferiancek.tasky.core.data.remote.error.getUiText
 import com.gavinferiancek.tasky.core.util.UiText
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -25,21 +27,24 @@ class AgendaListViewModel @Inject constructor(
         private set
 
     init {
-        viewModelScope.launch {
-            getAgenda(
-                time = System.currentTimeMillis()
-            )
-            state = state.copy(
-                dayList = dateManager.generateDayList(state.initialDate),
-                listHeader = generateListHeader(state.initialDate),
-            )
-        }
+        getAgenda(
+            timestamp = System.currentTimeMillis(),
+            date = state.selectedDay
+        )
+        state = state.copy(
+            dayList = dateManager.generateDayList(state.initialDate),
+            listHeader = generateListHeader(state.initialDate),
+        )
     }
 
     fun onTriggerEvent(event: AgendaListEvents) {
         state = when (event) {
+            is AgendaListEvents.OnDismissSnackbar -> state.copy(infoMessage = null)
             is AgendaListEvents.UpdateInitialDate -> {
-                getAgenda(time = dateManager.localDateToMillis(event.date))
+                getAgenda(
+                    timestamp = dateManager.localDateToMillis(event.date),
+                    date = event.date,
+                )
                 state.copy(
                     initialDate = event.date,
                     dayList = dateManager.generateDayList(event.date),
@@ -48,7 +53,10 @@ class AgendaListViewModel @Inject constructor(
                 )
             }
             is AgendaListEvents.UpdateSelectedDay -> {
-                getAgenda(time = dateManager.localDateToMillis(event.day))
+                getAgenda(
+                    timestamp = dateManager.localDateToMillis(event.day),
+                    date = event.day,
+                )
                 state.copy(
                     listHeader = generateListHeader(event.day),
                     selectedDay = event.day,
@@ -73,27 +81,33 @@ class AgendaListViewModel @Inject constructor(
     }
 
     private fun getAgenda(
-        time: Long,
+        timestamp: Long,
+        date: LocalDate,
     ) {
         viewModelScope.launch {
             state = state.copy(isLoading = true)
-            repository.getAgenda(
-                time = time
-            ).onSuccess { list ->
-                val groupedItems = dateManager.groupAgendaItemByTime(list)
-                state = state.copy(
-                    pastItems = groupedItems.getOrDefault("pastItems", listOf()),
-                    futureItems = groupedItems.getOrDefault("futureItems", listOf()),
-                    isLoading = false,
-                )
-            }.onFailure { e ->
-                state = state.copy(
-                    isLoading = false,
-                    pastItems = listOf(),
-                    futureItems = listOf(),
-                    infoMessage = e.getUiText(),
-                )
-            }
+            fetchAgenda(timestamp = timestamp)
+            getAgendaFromCache(date = date)
+            state = state.copy(isLoading = false)
         }
+    }
+
+    private suspend fun fetchAgenda(timestamp: Long) {
+        // TODO Only fetch if connected to internet. Else display offline mode indication
+        repository.fetchAgendaForDate(timestamp).onFailure { e ->
+            state = state.copy(infoMessage = e.getUiText())
+        }
+    }
+
+    private fun getAgendaFromCache(date: LocalDate) {
+        repository.getCachedAgendaForDate(
+            date = date.toString()
+        ).onEach { list ->
+            val groupedItems = dateManager.groupAgendaItemByTime(list)
+            state = state.copy(
+                pastItems = groupedItems.getOrDefault("pastItems", listOf()),
+                futureItems = groupedItems.getOrDefault("futureItems", listOf()),
+            )
+        }.launchIn(viewModelScope)
     }
 }

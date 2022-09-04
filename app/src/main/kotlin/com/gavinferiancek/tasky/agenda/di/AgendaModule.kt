@@ -52,7 +52,13 @@ object AgendaModule {
 
     @Singleton
     @Provides
-    fun provideAgendaRepository(api: AgendaApi): AgendaRepository {
-        return AgendaRepositoryImpl(api = api)
+    fun provideAgendaRepository(
+        api: AgendaApi,
+        database: TaskyDatabase,
+    ): AgendaRepository {
+        return AgendaRepositoryImpl(
+            api = api,
+            dao = database.dao,
+        )
     }
 }

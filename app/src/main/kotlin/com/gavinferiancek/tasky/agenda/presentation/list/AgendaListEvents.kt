@@ -4,6 +4,8 @@ import java.time.LocalDate
 
 sealed class AgendaListEvents {
 
+    object OnDismissSnackbar : AgendaListEvents()
+
     data class UpdateInitialDate(
         val date: LocalDate,
     ) : AgendaListEvents()

@@ -32,10 +32,14 @@ object DateTimeManager {
         )
     }
 
+    /**
+     * Converts a Unix Timestamp into a string date in the format of "YYYY-MM-DD".  Used when converting
+     * ResponseDtos to Entity classes allowing us to easily query the DB based on this date string. (UI
+     * uses LocalDate already, so DB queries by date are simple.)
+     */
     fun millisToDateString(
         millis: Long
     ): String {
-        // Returns "YYYY-MM-DD". UI uses LocalDate so we can easily search DB for entries for a given date.
         return millisToZonedDateTime(millis).toLocalDate().toString()
     }
 
