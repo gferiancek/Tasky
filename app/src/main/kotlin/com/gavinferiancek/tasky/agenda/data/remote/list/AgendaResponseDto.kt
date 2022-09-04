@@ -1,5 +1,6 @@
 package com.gavinferiancek.tasky.agenda.data.remote.list
 
+import com.gavinferiancek.tasky.agenda.data.local.database.entity.AgendaEntity
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
@@ -12,3 +13,11 @@ data class AgendaResponseDto(
     @Json(name = "reminders")
     val reminders: List<ReminderResponseDto>
 )
+
+fun AgendaResponseDto.toAgendaEntityList(): List<AgendaEntity> {
+    return buildList {
+        addAll(events.toAgendaEntityList())
+        addAll(tasks.toAgendaEntityList())
+        addAll(reminders.toAgendaEntityList())
+    }
+}

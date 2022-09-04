@@ -25,7 +25,7 @@ fun AttendeeResponseDto.toAttendeeEntity(): AttendeeEntity {
         userId = userId,
         email = email,
         fullName = fullName,
-        eventIdRef = eventId,
+        eventId = eventId,
         isGoing = isGoing,
         remindAt = remindAt,
     )

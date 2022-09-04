@@ -12,23 +12,25 @@ import org.jetbrains.annotations.NotNull
     tableName = "attendees",
     foreignKeys = [
         ForeignKey(
-            entity = EventEntity::class,
-            parentColumns = ["event_id"],
-            childColumns = ["user_id"],
+            entity = AgendaEntity::class,
+            parentColumns = ["id"],
+            childColumns = ["event_id"],
             onDelete = ForeignKey.CASCADE,
             onUpdate = ForeignKey.CASCADE,
         )
     ]
 )
 data class AttendeeEntity(
-    @PrimaryKey @ColumnInfo(name = "user_id")
+    @PrimaryKey(autoGenerate = true)
+    val id: Long = 0L,
+    @ColumnInfo(name = "user_id")
     val userId: String,
     @NotNull @ColumnInfo(name = "email")
     val email: String,
     @NotNull @ColumnInfo(name = "full_name")
     val fullName: String,
-    @NotNull @ColumnInfo(name = "event_id_ref")
-    val eventIdRef: String,
+    @NotNull @ColumnInfo(name = "event_id")
+    val eventId: String,
     @NotNull @ColumnInfo(name = "is_going")
     val isGoing: Boolean,
     @NotNull @ColumnInfo(name = "remind_at")
@@ -40,7 +42,7 @@ fun AttendeeEntity.toAttendee(): Attendee {
         email = email,
         fullName = fullName,
         userId = userId,
-        eventId = eventIdRef,
+        eventId = eventId,
         isGoing = isGoing,
         remindAt = DateTimeManager.millisToZonedDateTime(remindAt),
     )

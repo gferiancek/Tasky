@@ -15,7 +15,7 @@ data class PhotoResponseDto(
 fun PhotoResponseDto.toPhotoEntity(eventId: String): PhotoEntity {
     return PhotoEntity(
         photoId = key,
-        eventSourceId = eventId,
+        eventId = eventId,
         url = url,
     )
 }

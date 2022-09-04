@@ -5,10 +5,13 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import org.jetbrains.annotations.NotNull
 
-@Entity(tableName = "events")
-data class EventEntity(
-    @PrimaryKey @ColumnInfo(name = "event_id")
-    val eventId: String,
+@Entity(tableName = "agenda_items")
+data class AgendaEntity(
+    // Shared Columns
+    @PrimaryKey @ColumnInfo(name = "id")
+    val id: String,
+    @NotNull @ColumnInfo(name = "type")
+    val type: Type,
     @NotNull @ColumnInfo(name = "date")
     val date: String,
     @NotNull @ColumnInfo(name = "title")
@@ -19,10 +22,22 @@ data class EventEntity(
     val startTime: Long,
     @NotNull @ColumnInfo(name = "remind_at")
     val remindAt: Long,
+
+    // Event Columns
     @NotNull @ColumnInfo(name = "end_time")
-    val endTime: Long,
+    val endTime: Long? = null,
     @NotNull @ColumnInfo(name = "host_id")
-    val hostId: String,
+    val hostId: String? = null,
     @NotNull @ColumnInfo(name = "is_creator")
-    val isCreator: Boolean,
-)
+    val isCreator: Boolean? = null,
+
+    // Task Columns
+    @NotNull @ColumnInfo(name = "is_done")
+    val isDone: Boolean? = null
+) {
+    enum class Type {
+        EVENT,
+        TASK,
+        REMINDER,
+    }
+}

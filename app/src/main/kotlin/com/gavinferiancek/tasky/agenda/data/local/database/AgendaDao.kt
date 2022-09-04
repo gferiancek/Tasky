@@ -1,52 +1,58 @@
 package com.gavinferiancek.tasky.agenda.data.local.database
 
 import androidx.room.*
-import com.gavinferiancek.tasky.agenda.data.local.database.entity.EventEntity
-import com.gavinferiancek.tasky.agenda.data.local.database.entity.EventWithAttendeesAndPhotos
-import com.gavinferiancek.tasky.agenda.data.local.database.entity.ReminderEntity
-import com.gavinferiancek.tasky.agenda.data.local.database.entity.TaskEntity
+import com.gavinferiancek.tasky.agenda.data.local.database.entity.AgendaEntity
+import com.gavinferiancek.tasky.agenda.data.local.database.entity.AgendaWithAttendeesAndPhotos
+import com.gavinferiancek.tasky.agenda.data.local.database.entity.AttendeeEntity
+import com.gavinferiancek.tasky.agenda.data.local.database.entity.PhotoEntity
 import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface AgendaDao {
 
-    // EVENTS
-    @Insert
-    suspend fun insertEvent(event: EventEntity): Long
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insertAgendaItem(item: AgendaEntity): Long
 
     @Update
-    suspend fun updateEvent(event: EventEntity)
+    suspend fun updateAgendaItem(item: AgendaEntity)
 
-    /**
-     * Since Attendee/Photo Entities have ForeignKeys with Events we want to avoid using
-     * OnConflictStrategy.REPLACE, as that would delete and recreate child entities every time an Event
-     * is updated. Instead, we want to use Update for existing records.
-     */
-    suspend fun upsertEvents(events: List<EventEntity>) {
-        events.forEach { event ->
-            if (insertEvent(event) < 1) {
-                updateEvent(event)
+    suspend fun upsertAgendaItems(items: List<AgendaEntity>) {
+        items.forEach { item ->
+            if (insertAgendaItem(item) < 1) {
+                updateAgendaItem(item)
+            }
+        }
+    }
+
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insertAttendee(attendee: AttendeeEntity): Long
+
+    @Update
+    suspend fun updateAttendee(attendee: AttendeeEntity)
+
+    suspend fun upsertAttendees(attendees: List<AttendeeEntity>) {
+        attendees.forEach { attendee ->
+            if (insertAttendee(attendee) < 1) {
+                updateAttendee(attendee)
+            }
+        }
+    }
+
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    suspend fun insertPhoto(photo: PhotoEntity): Long
+
+    @Update
+    suspend fun updatePhoto(photo: PhotoEntity)
+
+    suspend fun upsertPhotos(photos: List<PhotoEntity>) {
+        photos.forEach { photo ->
+            if (insertPhoto(photo) < 1) {
+                updatePhoto(photo)
             }
         }
     }
 
     @Transaction
-    @Query("SELECT * FROM events WHERE date = :date")
-    fun getEventsForDate(date: String): Flow<List<EventWithAttendeesAndPhotos>>
-
-
-    // TASKS
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertTasks(tasks: List<TaskEntity>)
-
-    @Query("SELECT * FROM tasks WHERE date = :date")
-    fun getTasksForDate(date: String): Flow<List<TaskEntity>>
-
-
-    // REMINDERS
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertReminders(reminders: List<ReminderEntity>)
-
-    @Query("SELECT * FROM reminders WHERE date = :date")
-    fun getRemindersForDate(date: String): Flow<List<ReminderEntity>>
+    @Query("SELECT * FROM agenda_items WHERE date = :date")
+    fun getAgendaItemsForDate(date: String): Flow<List<AgendaWithAttendeesAndPhotos>>
 }

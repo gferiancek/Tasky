@@ -11,9 +11,9 @@ import org.jetbrains.annotations.NotNull
     tableName = "photos",
     foreignKeys = [
         ForeignKey(
-            entity = EventEntity::class,
-            parentColumns = ["event_id"],
-            childColumns = ["photo_id"],
+            entity = AgendaEntity::class,
+            parentColumns = ["id"],
+            childColumns = ["event_id"],
             onDelete = ForeignKey.CASCADE,
             onUpdate = ForeignKey.CASCADE,
         )
@@ -22,8 +22,8 @@ import org.jetbrains.annotations.NotNull
 data class PhotoEntity(
     @PrimaryKey @ColumnInfo(name = "photo_id")
     val photoId: String,
-    @NotNull @ColumnInfo(name = "event_source_id")
-    val eventSourceId: String,
+    @NotNull @ColumnInfo(name = "event_id")
+    val eventId: String,
     @NotNull @ColumnInfo(name = "url")
     val url: String,
 )

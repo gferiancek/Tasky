@@ -1,6 +1,6 @@
 package com.gavinferiancek.tasky.agenda.data.remote.list
 
-import com.gavinferiancek.tasky.agenda.data.local.database.entity.ReminderEntity
+import com.gavinferiancek.tasky.agenda.data.local.database.entity.AgendaEntity
 import com.gavinferiancek.tasky.agenda.domain.datetime.DateTimeManager
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
@@ -19,17 +19,18 @@ data class ReminderResponseDto(
     val remindAt: Long,
 )
 
-fun ReminderResponseDto.toReminderEntity(): ReminderEntity {
-    return ReminderEntity(
+fun ReminderResponseDto.toAgendaEntity(): AgendaEntity {
+    return AgendaEntity(
         id = id,
+        type = AgendaEntity.Type.REMINDER,
         date = DateTimeManager.millisToDateString(startTime),
         title = title,
         description = description,
         startTime = startTime,
-        remindAt = remindAt
+        remindAt = remindAt,
     )
 }
 
-fun List<ReminderResponseDto>.toReminderEntityList(): List<ReminderEntity> {
-    return map { it.toReminderEntity() }
+fun List<ReminderResponseDto>.toAgendaEntityList(): List<AgendaEntity> {
+    return map { it.toAgendaEntity() }
 }
