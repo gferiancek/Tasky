@@ -9,10 +9,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import com.gavinferiancek.tasky.agenda.presentation.components.AgendaHeader
-import com.gavinferiancek.tasky.agenda.presentation.components.DaySelector
-import com.gavinferiancek.tasky.agenda.presentation.components.EmptyText
-import com.gavinferiancek.tasky.agenda.presentation.components.TimeNeedle
+import com.gavinferiancek.tasky.agenda.presentation.components.*
 import com.gavinferiancek.tasky.core.presentation.components.CardLayout
 import com.gavinferiancek.tasky.core.presentation.components.CircularIndeterminateProgressBar
 import com.gavinferiancek.tasky.core.presentation.theme.LocalSpacing
@@ -45,11 +42,7 @@ fun AgendaScreen(
         )
         Spacer(modifier = Modifier.height(spacing.large))
 
-        Text(
-            text = state.listHeader.asString(),
-            color = MaterialTheme.colors.onSurface,
-            style = MaterialTheme.typography.h2,
-        )
+        ListHeader(header = state.listHeader.asString())
         Spacer(modifier = Modifier.height(spacing.medium))
 
         Crossfade(targetState = state.isLoading) { targetState ->
