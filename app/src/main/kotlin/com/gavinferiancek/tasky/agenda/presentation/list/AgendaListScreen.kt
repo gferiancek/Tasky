@@ -57,10 +57,9 @@ fun AgendaScreen(
         )
         Spacer(modifier = Modifier.height(spacing.medium))
 
-        Crossfade(targetState = state.isLoading) { targetState ->
+        Crossfade(targetState = !state.isLoading) { targetState ->
             when (targetState) {
-                true -> CircularIndeterminateProgressBar(modifier = Modifier.fillMaxSize())
-                else -> {
+                true -> {
                     if (state.pastItems.isEmpty() && state.futureItems.isEmpty()) EmptyText()
                     else {
                         val agendaItemFormatter =
@@ -75,8 +74,8 @@ fun AgendaScreen(
                                     item.id
                                 }
                             ) { item ->
-                                // TODO Replace Text with AgendaItem Composable
-                                Text(text = item.startTime.format(agendaItemFormatter))
+                                //TODO Replace Text with AgendaItem Composable
+                                Text(text = remember(item.startTime) { item.startTime.format(agendaItemFormatter) })
                                 Spacer(modifier = Modifier.height(spacing.small))
                             }
                             item {
@@ -89,13 +88,14 @@ fun AgendaScreen(
                                     item.id
                                 }
                             ) { item ->
-                                // TODO Replace Text with AgendaItem Composable
-                                Text(text = item.startTime.format(agendaItemFormatter))
+                                //TODO Replace Text with AgendaItem Composable
+                                Text(text = remember(item.startTime) { item.startTime.format(agendaItemFormatter) })
                                 Spacer(modifier = Modifier.height(spacing.small))
                             }
                         }
                     }
                 }
+                else -> CircularIndeterminateProgressBar(modifier = Modifier.fillMaxSize())
             }
         }
         showSnackbar(
