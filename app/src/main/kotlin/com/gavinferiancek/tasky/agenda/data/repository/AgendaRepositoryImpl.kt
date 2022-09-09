@@ -11,6 +11,7 @@ import com.gavinferiancek.tasky.agenda.domain.model.AgendaItem
 import com.gavinferiancek.tasky.agenda.domain.repository.AgendaRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.distinctUntilChanged
 import retrofit2.HttpException
 import java.time.LocalDate
 import java.time.ZoneOffset
@@ -25,11 +26,11 @@ class AgendaRepositoryImpl(
     override fun getCachedAgendaForDate(date: LocalDate): Flow<List<AgendaItem>> {
         val startTime = dateManager.localDateToMillis(
             date = date,
-            time = date.atStartOfDay().toLocalTime()
+            time = date.atStartOfDay().toLocalTime(),
         )
         val endTime = dateManager.localDateToMillis(
             date = date.plusDays(1),
-            time = date.plusDays(1).atStartOfDay().toLocalTime()
+            time = date.plusDays(1).atStartOfDay().toLocalTime(),
         ) - 1
 
         return combine(
@@ -42,7 +43,7 @@ class AgendaRepositoryImpl(
                 addAll(tasks.toTaskList())
                 addAll(reminders.toReminderList())
             }.sortedBy { it.startTime }
-        }
+        }.distinctUntilChanged()
     }
 
     override suspend fun fetchAgendaForDate(timestamp: Long): Result<Unit> {

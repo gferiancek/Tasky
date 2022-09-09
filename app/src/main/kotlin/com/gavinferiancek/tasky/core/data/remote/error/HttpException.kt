@@ -5,6 +5,8 @@ import com.squareup.moshi.Moshi
 import retrofit2.HttpException
 
 fun HttpException.extractExceptionMessage(): String? {
+    // Trying to parse 429 will result in an EOF exception
+    if (code() == 429) return null
     val adapter: JsonAdapter<ErrorResponseDto> =
         Moshi.Builder().build().adapter(ErrorResponseDto::class.java)
 

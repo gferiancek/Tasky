@@ -11,7 +11,8 @@ import com.gavinferiancek.tasky.agenda.domain.repository.AgendaRepository
 import com.gavinferiancek.tasky.core.data.remote.error.getUiText
 import com.gavinferiancek.tasky.core.util.UiText
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -83,28 +84,31 @@ class AgendaListViewModel @Inject constructor(
         timestamp: Long,
         date: LocalDate,
     ) {
-        viewModelScope.launch {
-            getAgendaFromCache(date = date)
-            fetchAgenda(timestamp = timestamp)
-        }
+        getAgendaFromCache(date = date)
+        fetchAgenda(timestamp = timestamp)
     }
 
-    private suspend fun fetchAgenda(timestamp: Long) {
+    private fun fetchAgenda(timestamp: Long) {
         // TODO Only fetch if connected to internet. Else display offline mode indication
-        repository.fetchAgendaForDate(timestamp).onFailure { e ->
-            state = state.copy(infoMessage = e.getUiText())
+        viewModelScope.launch {
+            state = state.copy(isLoading = true)
+            repository.fetchAgendaForDate(timestamp).onFailure { e ->
+                state = state.copy(infoMessage = e.getUiText())
+            }
+            state = state.copy(isLoading = false)
         }
     }
 
-    private suspend fun getAgendaFromCache(date: LocalDate) {
+    private fun getAgendaFromCache(date: LocalDate) {
         repository.getCachedAgendaForDate(
             date = date
-        ).collectLatest { list ->
+        ).onEach { list ->
             val groupedItems = dateManager.groupAgendaItemByTime(list)
             state = state.copy(
                 pastItems = groupedItems.getOrDefault("pastItems", listOf()),
                 futureItems = groupedItems.getOrDefault("futureItems", listOf()),
+                hasData = list.isNotEmpty(),
             )
-        }
+        }.launchIn(viewModelScope)
     }
 }

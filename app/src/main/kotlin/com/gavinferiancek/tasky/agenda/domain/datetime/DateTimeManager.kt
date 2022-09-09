@@ -45,7 +45,7 @@ object DateTimeManager {
         return ZonedDateTime.of(
             date,
             time,
-            ZoneOffset.UTC
+            ZoneOffset.systemDefault(),
         ).toInstant().toEpochMilli()
     }
 }
