@@ -31,5 +31,6 @@
     <string name="date_today">Today</string>
     <string name="date_tomorrow">Tomorrow</string>
     <string name="header_dropdown_content_description">Displays dialog to pick a new date</string>
+    <string name="empty_text">No agenda exists for today.\nTry adding an Event, Reminder, or Task by clicking \"+\"</string>
 
 </resources>

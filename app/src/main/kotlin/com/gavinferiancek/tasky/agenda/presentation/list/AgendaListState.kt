@@ -9,6 +9,7 @@ data class AgendaListState(
     val isLoading: Boolean = false,
     val pastItems: List<AgendaItem> = listOf(),
     val futureItems: List<AgendaItem> = listOf(),
+    val hasData: Boolean = false,
     val initialDate: LocalDate = LocalDate.now(),
     val dayList: List<LocalDate> = listOf(),
     val listHeader: UiText = UiText.StringResource(id = R.string.date_today),

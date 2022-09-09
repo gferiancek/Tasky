@@ -13,26 +13,32 @@ import androidx.compose.ui.unit.dp
 /**
  * Composable used to show current time in relation to AgendaList items.
  * @param modifier Modifier applied to [Row] that encapsulates the TimeNeedle.
+ * @param isVisible Used to determine whether or not the TimeNeedle should be drawn.
  */
 @Composable
 fun TimeNeedle(
     modifier: Modifier = Modifier,
+    isVisible: Boolean = true,
 ) {
-    Row(
-        modifier = modifier,
-        verticalAlignment = Alignment.CenterVertically,
-    ) {
-        Box(
-            modifier = Modifier
-                .size(10.dp)
-                .clip(CircleShape)
-                .background(MaterialTheme.colors.primary),
-        )
-        Box(
-            modifier = Modifier
-                .height(2.dp)
-                .fillMaxWidth()
-                .background(MaterialTheme.colors.primary),
-        )
+    // Used to avoid jank on Crossfade animation from populated to empty list. (Without this check an
+    // empty list with TimeNeedle is drawn and then that is faded out to the EmptyListText() )
+    if (isVisible) {
+        Row(
+            modifier = modifier,
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Box(
+                modifier = Modifier
+                    .size(10.dp)
+                    .clip(CircleShape)
+                    .background(MaterialTheme.colors.primary),
+            )
+            Box(
+                modifier = Modifier
+                    .height(2.dp)
+                    .fillMaxWidth()
+                    .background(MaterialTheme.colors.primary),
+            )
+        }
     }
 }
