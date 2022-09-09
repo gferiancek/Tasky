@@ -2,13 +2,13 @@ package com.gavinferiancek.tasky.agenda.data.local.database
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
-import com.gavinferiancek.tasky.agenda.data.local.database.entity.AgendaEntity
-import com.gavinferiancek.tasky.agenda.data.local.database.entity.AttendeeEntity
-import com.gavinferiancek.tasky.agenda.data.local.database.entity.PhotoEntity
+import com.gavinferiancek.tasky.agenda.data.local.database.entity.*
 
 @Database(
     entities = [
-        AgendaEntity::class,
+        EventEntity::class,
+        TaskEntity::class,
+        ReminderEntity::class,
         AttendeeEntity::class,
         PhotoEntity::class,
     ],

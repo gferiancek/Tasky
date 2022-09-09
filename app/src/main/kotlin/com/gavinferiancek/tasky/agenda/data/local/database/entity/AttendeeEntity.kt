@@ -12,7 +12,7 @@ import org.jetbrains.annotations.NotNull
     tableName = "attendees",
     foreignKeys = [
         ForeignKey(
-            entity = AgendaEntity::class,
+            entity = EventEntity::class,
             parentColumns = ["id"],
             childColumns = ["event_id"],
             onDelete = ForeignKey.CASCADE,

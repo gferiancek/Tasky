@@ -11,7 +11,7 @@ import org.jetbrains.annotations.NotNull
     tableName = "photos",
     foreignKeys = [
         ForeignKey(
-            entity = AgendaEntity::class,
+            entity = EventEntity::class,
             parentColumns = ["id"],
             childColumns = ["event_id"],
             onDelete = ForeignKey.CASCADE,

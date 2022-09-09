@@ -59,6 +59,7 @@ object AgendaModule {
         return AgendaRepositoryImpl(
             api = api,
             dao = database.dao,
+            dateManager = DateTimeManager
         )
     }
 }

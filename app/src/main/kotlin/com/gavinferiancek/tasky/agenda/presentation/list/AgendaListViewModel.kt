@@ -11,8 +11,7 @@ import com.gavinferiancek.tasky.agenda.domain.repository.AgendaRepository
 import com.gavinferiancek.tasky.core.data.remote.error.getUiText
 import com.gavinferiancek.tasky.core.util.UiText
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -85,10 +84,8 @@ class AgendaListViewModel @Inject constructor(
         date: LocalDate,
     ) {
         viewModelScope.launch {
-            state = state.copy(isLoading = true)
-            fetchAgenda(timestamp = timestamp)
             getAgendaFromCache(date = date)
-            state = state.copy(isLoading = false)
+            fetchAgenda(timestamp = timestamp)
         }
     }
 
@@ -99,15 +96,15 @@ class AgendaListViewModel @Inject constructor(
         }
     }
 
-    private fun getAgendaFromCache(date: LocalDate) {
+    private suspend fun getAgendaFromCache(date: LocalDate) {
         repository.getCachedAgendaForDate(
-            date = date.toString()
-        ).onEach { list ->
+            date = date
+        ).collectLatest { list ->
             val groupedItems = dateManager.groupAgendaItemByTime(list)
             state = state.copy(
                 pastItems = groupedItems.getOrDefault("pastItems", listOf()),
                 futureItems = groupedItems.getOrDefault("futureItems", listOf()),
             )
-        }.launchIn(viewModelScope)
+        }
     }
 }
