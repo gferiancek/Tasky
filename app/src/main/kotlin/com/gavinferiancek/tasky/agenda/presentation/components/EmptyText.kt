@@ -8,6 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import com.gavinferiancek.tasky.R
 import com.gavinferiancek.tasky.core.presentation.theme.LocalSpacing
@@ -29,7 +30,7 @@ fun EmptyText() {
         )
         Spacer(modifier = Modifier.height(spacing.small))
         Text(
-            text = "No agenda exists for today.\nTry adding an Event, Reminder, or Task by clicking \"+\"",
+            text = stringResource(id = R.string.empty_text),
             color = MaterialTheme.colors.muted,
             style = MaterialTheme.typography.body1,
             textAlign = TextAlign.Center,
