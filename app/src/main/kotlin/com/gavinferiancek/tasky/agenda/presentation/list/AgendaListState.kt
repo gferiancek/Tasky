@@ -6,6 +6,7 @@ import com.gavinferiancek.tasky.core.util.UiText
 import java.time.LocalDate
 
 data class AgendaListState(
+    val name: String = "",
     val isLoading: Boolean = false,
     val pastItems: List<AgendaItem> = listOf(),
     val futureItems: List<AgendaItem> = listOf(),

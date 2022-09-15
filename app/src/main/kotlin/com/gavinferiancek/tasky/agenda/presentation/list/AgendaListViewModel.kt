@@ -7,8 +7,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gavinferiancek.tasky.R
 import com.gavinferiancek.tasky.agenda.domain.datetime.DateTimeManager
+import com.gavinferiancek.tasky.agenda.domain.model.AgendaItem
+import com.gavinferiancek.tasky.agenda.domain.model.Event
+import com.gavinferiancek.tasky.agenda.domain.model.Reminder
+import com.gavinferiancek.tasky.agenda.domain.model.Task
 import com.gavinferiancek.tasky.agenda.domain.repository.AgendaRepository
 import com.gavinferiancek.tasky.core.data.remote.error.getUiText
+import com.gavinferiancek.tasky.core.domain.preferences.UserPreferences
 import com.gavinferiancek.tasky.core.util.UiText
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
@@ -22,6 +27,7 @@ import javax.inject.Inject
 class AgendaListViewModel @Inject constructor(
     private val dateManager: DateTimeManager,
     private val repository: AgendaRepository,
+    userPreferences: UserPreferences,
 ) : ViewModel() {
     var state by mutableStateOf(AgendaListState())
         private set
@@ -31,6 +37,7 @@ class AgendaListViewModel @Inject constructor(
         state = state.copy(
             dayList = dateManager.generateDayList(state.initialDate),
             listHeader = generateListHeader(state.initialDate),
+            name = formatUserName(userPreferences.getName())
         )
     }
 
@@ -54,6 +61,8 @@ class AgendaListViewModel @Inject constructor(
                     selectedDay = event.day,
                 )
             }
+            is AgendaListEvents.UpdateTask -> updateTask(task = event.task)
+            is AgendaListEvents.DeleteAgendaItem -> deleteAgendaItem(item = event.item)
         }
     }
 
@@ -69,6 +78,14 @@ class AgendaListViewModel @Inject constructor(
                 val formatter = DateTimeFormatter.ofPattern("E d, u")
                 UiText.DynamicString(selectedDay.format(formatter))
             }
+        }
+    }
+
+    private fun formatUserName(fullName: String): String {
+        val splitName = fullName.split(" ")
+        return when (splitName.count()) {
+            1 -> splitName[0].substring(0, 2).uppercase()
+            else -> "${splitName[0][0]}${splitName[1][0]}".uppercase()
         }
     }
 
@@ -98,5 +115,47 @@ class AgendaListViewModel @Inject constructor(
                 futureItems = groupedItems.getOrDefault("futureItems", listOf()),
             )
         }.launchIn(viewModelScope)
+    }
+
+    private fun updateTask(task: Task) {
+        viewModelScope.launch {
+            repository.updateTask(task)
+                .onFailure { e ->
+                    state = state.copy(
+                        infoMessage = e.getUiText()
+                    )
+                }
+        }
+    }
+
+    private fun deleteAgendaItem(item: AgendaItem) {
+        viewModelScope.launch {
+            when (item) {
+                is Event -> {
+                    repository.deleteEvent(id = item.id)
+                        .onFailure { e ->
+                            state = state.copy(
+                                infoMessage = e.getUiText()
+                            )
+                        }
+                }
+                is Task -> {
+                    repository.deleteTask(id = item.id)
+                        .onFailure { e ->
+                            state = state.copy(
+                                infoMessage = e.getUiText()
+                            )
+                        }
+                }
+                is Reminder -> {
+                    repository.deleteReminder(id = item.id)
+                        .onFailure { e ->
+                            state = state.copy(
+                                infoMessage = e.getUiText()
+                            )
+                        }
+                }
+            }
+        }
     }
 }
