@@ -12,6 +12,8 @@ import com.gavinferiancek.tasky.agenda.domain.repository.AgendaRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.supervisorScope
 import retrofit2.HttpException
 import java.time.LocalDate
 import java.time.ZoneOffset
@@ -52,13 +54,17 @@ class AgendaRepositoryImpl(
                 timeZone = ZoneOffset.systemDefault().id,
                 timestamp = timestamp,
             )
-            dao.upsertEvents(events = items.events.toEventEntityList())
-            items.events.forEach { event ->
-                dao.upsertAttendees(attendees = event.attendees.toAttendeeEntityList())
-                dao.upsertPhotos(photos = event.photos.toPhotoEntityList(event.id))
+            supervisorScope {
+                launch {
+                    dao.upsertEvents(events = items.events.toEventEntityList())
+                    items.events.forEach { event ->
+                        launch { dao.upsertAttendees(attendees = event.attendees.toAttendeeEntityList()) }
+                        launch { dao.upsertPhotos(photos = event.photos.toPhotoEntityList(event.id)) }
+                    }
+                }
+                launch { dao.insertTasks(tasks = items.tasks.toTaskEntityList()) }
+                launch { dao.insertReminders(reminders = items.reminders.toReminderEntityList()) }
             }
-            dao.insertTasks(tasks = items.tasks.toTaskEntityList())
-            dao.insertReminders(reminders = items.reminders.toReminderEntityList())
             Result.success(Unit)
         } catch (e: HttpException) {
             Result.failure(e)
