@@ -4,7 +4,9 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
+import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.core.tween
 import androidx.compose.material.Scaffold
 import androidx.compose.material.ScaffoldState
 import androidx.compose.material.rememberScaffoldState
@@ -75,7 +77,32 @@ fun NavGraphBuilder.addLoginScreen(
     scaffoldState: ScaffoldState,
 ) {
     composable(
-        route = Screens.Login.route
+        route = Screens.Login.route,
+        enterTransition = {
+            slideIntoContainer(
+                towards = AnimatedContentScope.SlideDirection.Up,
+                animationSpec = tween(700)
+            )
+        },
+        exitTransition = {
+            if (targetState.destination.route == Screens.AgendaList.route) {
+                slideOutOfContainer(
+                    towards = AnimatedContentScope.SlideDirection.Down,
+                    animationSpec = tween(700)
+                )
+            } else {
+                slideOutOfContainer(
+                    towards = AnimatedContentScope.SlideDirection.Start,
+                    animationSpec = tween(700)
+                )
+            }
+        },
+        popEnterTransition = {
+            slideIntoContainer(
+                towards = AnimatedContentScope.SlideDirection.End,
+                animationSpec = tween(700)
+            )
+        }
     ) {
         val viewModel: LoginViewModel = hiltViewModel()
         LoginScreen(
@@ -84,7 +111,7 @@ fun NavGraphBuilder.addLoginScreen(
             events = viewModel::onTriggerEvent,
             onNavigateToRegister = { navController.navigate(Screens.Register.route) },
             onNavigateToAgenda = {
-                navController.navigate(Screens.Agenda.route) {
+                navController.navigate(Screens.AgendaList.route) {
                     popUpTo(Screens.Login.route) { inclusive = true }
                 }
             }
@@ -98,7 +125,19 @@ fun NavGraphBuilder.addRegisterScreen(
     scaffoldState: ScaffoldState,
 ) {
     composable(
-        route = Screens.Register.route
+        route = Screens.Register.route,
+        enterTransition = {
+            slideIntoContainer(
+                towards = AnimatedContentScope.SlideDirection.Start,
+                animationSpec = tween(700)
+            )
+        },
+        popExitTransition = {
+            slideOutOfContainer(
+                towards = AnimatedContentScope.SlideDirection.End,
+                animationSpec = tween(700)
+            )
+        }
     ) {
         val viewModel: RegisterViewModel = hiltViewModel()
         RegisterScreen(
@@ -116,7 +155,32 @@ fun NavGraphBuilder.addAgendaScreen(
     scaffoldState: ScaffoldState,
 ) {
     composable(
-        route = Screens.Agenda.route,
+        route = Screens.AgendaList.route,
+        enterTransition = {
+            slideIntoContainer(
+                towards = AnimatedContentScope.SlideDirection.Down,
+                animationSpec = tween(700)
+            )
+        },
+        popEnterTransition = {
+            slideIntoContainer(
+                towards = AnimatedContentScope.SlideDirection.End,
+                animationSpec = tween(700)
+            )
+        },
+        exitTransition = {
+            if (targetState.destination.route == Screens.Login.route) {
+                slideOutOfContainer(
+                    towards = AnimatedContentScope.SlideDirection.Up,
+                    animationSpec = tween(700)
+                )
+            } else {
+                slideOutOfContainer(
+                    towards = AnimatedContentScope.SlideDirection.Start,
+                    animationSpec = tween(700)
+                )
+            }
+        }
     ) {
         val viewModel: AgendaListViewModel = hiltViewModel()
         AgendaScreen(

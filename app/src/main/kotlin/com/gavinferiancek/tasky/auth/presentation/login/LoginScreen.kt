@@ -20,7 +20,7 @@ import com.gavinferiancek.tasky.auth.presentation.components.PasswordTextField
 import com.gavinferiancek.tasky.core.presentation.components.CardLayout
 import com.gavinferiancek.tasky.core.presentation.components.CircularIndeterminateProgressBar
 import com.gavinferiancek.tasky.core.presentation.components.showSnackbar
-import com.gavinferiancek.tasky.core.presentation.theme.LightBlue
+import com.gavinferiancek.tasky.core.presentation.theme.LinkText
 import com.gavinferiancek.tasky.core.presentation.theme.LocalSpacing
 import com.gavinferiancek.tasky.core.presentation.theme.muted
 
@@ -89,7 +89,7 @@ fun LoginScreen(
                         text = AnnotatedString(
                             text = stringResource(id = R.string.signup_clickable_text),
                             spanStyle = SpanStyle(
-                                color = LightBlue,
+                                color = LinkText,
                             )
                         ),
                         style = MaterialTheme.typography.subtitle1,

@@ -8,8 +8,6 @@ import androidx.lifecycle.viewModelScope
 import com.gavinferiancek.tasky.auth.domain.repository.AuthRepository
 import com.gavinferiancek.tasky.core.presentation.navigation.Screens
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -25,7 +23,7 @@ class MainViewModel @Inject constructor(
         viewModelScope.launch {
             state = state.copy(isLoading = true)
             repository.authenticateToken()
-                .onSuccess { state = state.copy(startDestination = Screens.Agenda.route) }
+                .onSuccess { state = state.copy(startDestination = Screens.AgendaList.route) }
             state = state.copy(isLoading = false)
         }
     }
