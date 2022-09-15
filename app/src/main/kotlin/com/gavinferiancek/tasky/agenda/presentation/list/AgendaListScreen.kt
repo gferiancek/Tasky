@@ -47,9 +47,14 @@ fun AgendaScreen(
             header = {
                 AgendaHeader(
                     initialDate = state.initialDate,
+                    name = state.name,
                     onSelectDate = { date ->
                         events(AgendaListEvents.UpdateInitialDate(date))
                     },
+                    onLogout = {
+                        onLogout()
+                        onNavigateToLogin()
+                    }
                 )
             }
         ) {
