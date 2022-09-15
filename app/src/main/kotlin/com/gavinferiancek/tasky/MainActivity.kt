@@ -61,6 +61,7 @@ class MainActivity : ComponentActivity() {
                             )
                             addAgendaScreen(
                                 navController = navController,
+                                onLogout = viewModel::logoutUser
                             )
                             addEventDetailScreen(
                                 navController = navController,
@@ -160,6 +161,7 @@ fun NavGraphBuilder.addRegisterScreen(
 @OptIn(ExperimentalAnimationApi::class)
 fun NavGraphBuilder.addAgendaScreen(
     navController: NavController,
+    onLogout: () -> Unit,
 ) {
     composable(
         route = Screens.AgendaList.route,

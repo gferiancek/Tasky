@@ -6,6 +6,7 @@ import com.gavinferiancek.tasky.auth.data.remote.register.RegisterRequestDto
 import com.gavinferiancek.tasky.auth.domain.repository.AuthRepository
 import com.gavinferiancek.tasky.core.domain.preferences.UserPreferences
 import retrofit2.HttpException
+import java.io.IOException
 import java.util.concurrent.CancellationException
 
 class AuthRepositoryImpl(
@@ -65,6 +66,20 @@ class AuthRepositoryImpl(
                 if (e is HttpException && e.code() == 401) userPreferences.editToken("")
                 Result.failure(e)
             }
+        }
+    }
+
+    override suspend fun logoutUser() {
+        try {
+            authApi.logoutUser()
+        }
+        // Nothing to do with these exceptions, but they're caught to prevent the app from crashing.
+        // (Imagine hitting logout in airplane mode and having the app crash instead of logging out.)
+        catch (e: HttpException) {
+        } catch (e: IOException) {
+        } finally {
+            userPreferences.editName("")
+            userPreferences.editToken("")
         }
     }
 }
