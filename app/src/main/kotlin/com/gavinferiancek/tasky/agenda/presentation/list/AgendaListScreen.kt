@@ -80,8 +80,18 @@ fun AgendaScreen(
                 onRefresh = { events(AgendaListEvents.OnRefresh) }
             ) {
                 AgendaList(
+                    modifier = Modifier.fillMaxSize(),
                     pastItems = state.pastItems,
                     futureItems = state.futureItems,
+                    onToggleIsDone = { task ->
+                        events(AgendaListEvents.UpdateTask(task))
+                    },
+                    onNavigateToEventDetail = onNavigateToEventDetail,
+                    onNavigateToTaskDetail = onNavigateToTaskDetail,
+                    onNavigateToReminderDetail = onNavigateToReminderDetail,
+                    onDelete = { item ->
+                        events(AgendaListEvents.DeleteAgendaItem(item))
+                    },
                 )
             }
         }

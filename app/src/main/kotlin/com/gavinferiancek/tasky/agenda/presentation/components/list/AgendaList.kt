@@ -8,12 +8,14 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import com.gavinferiancek.tasky.agenda.domain.NavigationOptions
 import com.gavinferiancek.tasky.agenda.domain.model.AgendaItem
+import com.gavinferiancek.tasky.agenda.domain.model.Task
+import com.gavinferiancek.tasky.agenda.presentation.components.list.item.AgendaListItem
 import com.gavinferiancek.tasky.core.presentation.theme.LocalSpacing
 import java.time.format.DateTimeFormatter
 
@@ -22,6 +24,12 @@ import java.time.format.DateTimeFormatter
  * @param modifier Modifier applied to LazyColumn.
  * @param pastItems [List]<[AgendaItem]> that contains a startTime before the current time.
  * @param futureItems [List]<[AgendaItem]> that contains a startTime after the current time.
+ * @param onToggleIsDone Lambda to pass [Task] back to VM after toggling the isDone value.
+ * @param onDelete Lambda to pass AgendaItem back to VM after clicking on it's Delete action.
+ * @param onNavigateToEventDetail Lambda used to navigate to the Event detail screen with supplied NavigationOptions.
+ * @param onNavigateToTaskDetail Lambda used to navigate to the Task detail screen with supplied NavigationOptions.
+ * @param onNavigateToReminderDetail Lambda used to navigate to the Reminder detail screen with supplied NavigationOptions.
+
  */
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -29,6 +37,11 @@ fun AgendaList(
     modifier: Modifier = Modifier,
     pastItems: List<AgendaItem>,
     futureItems: List<AgendaItem>,
+    onToggleIsDone: (Task) -> Unit,
+    onDelete: (AgendaItem) -> Unit,
+    onNavigateToEventDetail: (NavigationOptions) -> Unit,
+    onNavigateToTaskDetail: (NavigationOptions) -> Unit,
+    onNavigateToReminderDetail: (NavigationOptions) -> Unit,
 ) {
     val spacing = LocalSpacing.current
     val hasData = remember(pastItems, futureItems) {
@@ -45,14 +58,23 @@ fun AgendaList(
                         items = pastItems,
                         key = { it.id }
                     ) { item ->
-                        //TODO Replace Text with AgendaItem Composable
-                        Text(text = remember(item.startTime) {
-                            item.startTime.format(
-                                dateFormatter
-                            )
-                        })
+                        AgendaListItem(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .animateItemPlacement(),
+                            item = item,
+                            formatter = dateFormatter,
+                            onToggleIsDone = { task ->
+                                onToggleIsDone(task)
+                            },
+                            onNavigateToEventDetail = onNavigateToEventDetail,
+                            onNavigateToTaskDetail = onNavigateToTaskDetail,
+                            onNavigateToReminderDetail = onNavigateToReminderDetail,
+                            onDelete = { onDelete(item) },
+                        )
                         Spacer(modifier = Modifier.height(spacing.small))
                     }
+
                     item {
                         TimeNeedle(
                             modifier = Modifier
@@ -62,16 +84,25 @@ fun AgendaList(
                         )
                         Spacer(modifier = Modifier.height(spacing.small))
                     }
+
                     items(
                         items = futureItems,
                         key = { it.id }
                     ) { item ->
-                        //TODO Replace Text with AgendaItem Composable
-                        Text(text = remember(item.startTime) {
-                            item.startTime.format(
-                                dateFormatter
-                            )
-                        })
+                        AgendaListItem(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .animateItemPlacement(),
+                            item = item,
+                            formatter = dateFormatter,
+                            onToggleIsDone = { task ->
+                                onToggleIsDone(task)
+                            },
+                            onNavigateToEventDetail = onNavigateToEventDetail,
+                            onNavigateToTaskDetail = onNavigateToTaskDetail,
+                            onNavigateToReminderDetail = onNavigateToReminderDetail,
+                            onDelete = { onDelete(item) },
+                        )
                         Spacer(modifier = Modifier.height(spacing.small))
                     }
                 }
