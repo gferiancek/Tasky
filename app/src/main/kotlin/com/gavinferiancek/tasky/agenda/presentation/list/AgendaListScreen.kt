@@ -1,6 +1,5 @@
 package com.gavinferiancek.tasky.agenda.presentation.list
 
-import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.ScaffoldState
@@ -10,10 +9,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.gavinferiancek.tasky.R
-import com.gavinferiancek.tasky.agenda.presentation.components.AgendaHeader
-import com.gavinferiancek.tasky.agenda.presentation.components.AgendaList
-import com.gavinferiancek.tasky.agenda.presentation.components.DaySelector
-import com.gavinferiancek.tasky.agenda.presentation.components.EmptyText
+import com.gavinferiancek.tasky.agenda.presentation.components.list.AgendaHeader
+import com.gavinferiancek.tasky.agenda.presentation.components.list.AgendaList
+import com.gavinferiancek.tasky.agenda.presentation.components.list.DaySelector
 import com.gavinferiancek.tasky.core.presentation.components.CardLayout
 import com.gavinferiancek.tasky.core.presentation.components.CircularIndeterminateProgressBar
 import com.gavinferiancek.tasky.core.presentation.components.showSnackbar
@@ -59,23 +57,15 @@ fun AgendaScreen(
             contentAlignment = Alignment.TopCenter,
         ) {
             if (state.isLoading) CircularIndeterminateProgressBar(modifier = Modifier.fillMaxWidth())
-            Crossfade(targetState = state.hasData) { targetState ->
-                when (targetState) {
-                    true -> {
-                        AgendaList(
-                            pastItems = state.pastItems,
-                            futureItems = state.futureItems,
-                            hasData = state.hasData,
-                        )
-                    }
-                    else -> EmptyText()
-                }
-            }
+            AgendaList(
+                pastItems = state.pastItems,
+                futureItems = state.futureItems,
+            )
         }
-        showSnackbar(
-            scaffoldState = scaffoldState,
-            message = state.infoMessage?.asString(),
-            label = stringResource(id = R.string.action_ok),
-            onDismiss = { events(AgendaListEvents.OnDismissSnackbar) })
     }
+    showSnackbar(
+        scaffoldState = scaffoldState,
+        message = state.infoMessage?.asString(),
+        label = stringResource(id = R.string.action_ok),
+        onDismiss = { events(AgendaListEvents.OnDismissSnackbar) })
 }

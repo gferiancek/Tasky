@@ -1,4 +1,4 @@
-package com.gavinferiancek.tasky.agenda.presentation.components
+package com.gavinferiancek.tasky.agenda.presentation.components.list
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -38,7 +38,7 @@ fun DaySelector(
                 day = currentDay,
                 isSelected = selectedDay == currentDay,
                 onSelectDay = { day ->
-                    if ( day != selectedDay) {
+                    if (day != selectedDay) {
                         onSelectDay(day)
                     }
                 }

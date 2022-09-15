@@ -107,7 +107,6 @@ class AgendaListViewModel @Inject constructor(
             state = state.copy(
                 pastItems = groupedItems.getOrDefault("pastItems", listOf()),
                 futureItems = groupedItems.getOrDefault("futureItems", listOf()),
-                hasData = list.isNotEmpty(),
             )
         }.launchIn(viewModelScope)
     }

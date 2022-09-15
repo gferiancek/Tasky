@@ -1,4 +1,4 @@
-package com.gavinferiancek.tasky.agenda.presentation.components
+package com.gavinferiancek.tasky.agenda.presentation.components.list
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
