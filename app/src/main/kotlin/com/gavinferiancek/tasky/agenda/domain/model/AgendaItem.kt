@@ -1,8 +1,9 @@
 package com.gavinferiancek.tasky.agenda.domain.model
 
+import com.gavinferiancek.tasky.agenda.data.local.database.entity.TaskEntity
+import com.gavinferiancek.tasky.agenda.data.remote.shared.TaskRequestDto
 import java.time.ZonedDateTime
 
-// Only implementing field necessary for current UI
 sealed class AgendaItem {
     abstract val id: String
     abstract val title: String
@@ -22,7 +23,7 @@ data class Event(
     val isCreator: Boolean,
     val attendees: List<Attendee>,
     val photos: List<Photo>
-): AgendaItem()
+) : AgendaItem()
 
 data class Task(
     override val id: String,
@@ -31,7 +32,29 @@ data class Task(
     override val startTime: ZonedDateTime,
     override val remindAt: ZonedDateTime,
     val isDone: Boolean
-): AgendaItem()
+) : AgendaItem()
+
+fun Task.toTaskRequestDto(): TaskRequestDto {
+    return TaskRequestDto(
+        id = id,
+        title = title,
+        description = description,
+        startTime = startTime.toInstant().toEpochMilli(),
+        remindAt = remindAt.toInstant().toEpochMilli(),
+        isDone = isDone,
+    )
+}
+
+fun Task.toTaskEntity(): TaskEntity {
+    return TaskEntity(
+        id = id,
+        title = title,
+        description = description,
+        startTime = startTime.toInstant().toEpochMilli(),
+        remindAt = remindAt.toInstant().toEpochMilli(),
+        isDone = isDone,
+    )
+}
 
 data class Reminder(
     override val id: String,
@@ -39,4 +62,4 @@ data class Reminder(
     override val description: String,
     override val startTime: ZonedDateTime,
     override val remindAt: ZonedDateTime,
-): AgendaItem()
+) : AgendaItem()

@@ -1,7 +1,10 @@
 package com.gavinferiancek.tasky.agenda.presentation.components.list
 
 import androidx.compose.animation.Crossfade
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -20,6 +23,7 @@ import java.time.format.DateTimeFormatter
  * @param pastItems [List]<[AgendaItem]> that contains a startTime before the current time.
  * @param futureItems [List]<[AgendaItem]> that contains a startTime after the current time.
  */
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun AgendaList(
     modifier: Modifier = Modifier,
@@ -50,7 +54,12 @@ fun AgendaList(
                         Spacer(modifier = Modifier.height(spacing.small))
                     }
                     item {
-                        TimeNeedle(isVisible = hasData.value)
+                        TimeNeedle(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .animateItemPlacement(),
+                            isVisible = hasData.value
+                        )
                         Spacer(modifier = Modifier.height(spacing.small))
                     }
                     items(
@@ -67,7 +76,14 @@ fun AgendaList(
                     }
                 }
             }
-            false -> EmptyText()
+            false -> {
+                LazyColumn(
+                    modifier = modifier,
+                    verticalArrangement = Arrangement.Center,
+                ) {
+                    item { EmptyText() }
+                }
+            }
         }
     }
 }

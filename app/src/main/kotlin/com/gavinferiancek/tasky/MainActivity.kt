@@ -61,7 +61,15 @@ class MainActivity : ComponentActivity() {
                             )
                             addAgendaScreen(
                                 navController = navController,
-                                scaffoldState = scaffoldState,
+                            )
+                            addEventDetailScreen(
+                                navController = navController,
+                            )
+                            addTaskDetailScreen(
+                                navController = navController,
+                            )
+                            addReminderDetailScreen(
+                                navController = navController,
                             )
                         }
                     )
@@ -152,7 +160,6 @@ fun NavGraphBuilder.addRegisterScreen(
 @OptIn(ExperimentalAnimationApi::class)
 fun NavGraphBuilder.addAgendaScreen(
     navController: NavController,
-    scaffoldState: ScaffoldState,
 ) {
     composable(
         route = Screens.AgendaList.route,
@@ -185,8 +192,84 @@ fun NavGraphBuilder.addAgendaScreen(
         val viewModel: AgendaListViewModel = hiltViewModel()
         AgendaScreen(
             state = viewModel.state,
-            scaffoldState = scaffoldState,
             events = viewModel::onTriggerEvent,
         )
+    }
+}
+
+/**
+ * Three Detail screens all have hardcoded values just to show that the correct screen is displayed
+ * with the intended values for passed arguments. Will update when actually building the screens.
+ */
+
+@OptIn(ExperimentalAnimationApi::class)
+fun NavGraphBuilder.addEventDetailScreen(
+    navController: NavController,
+) {
+    composable(
+        route = "${Screens.EventDetail.route}/{id}/{isEditing}",
+        arguments = Screens.EventDetail.arguments,
+        enterTransition = {
+            slideIntoContainer(
+                towards = AnimatedContentScope.SlideDirection.Start,
+                animationSpec = tween(700)
+            )
+        },
+        popExitTransition = {
+            slideOutOfContainer(
+                towards = AnimatedContentScope.SlideDirection.End,
+                animationSpec = tween(700)
+            )
+        }
+    ) {
+
+    }
+}
+
+@OptIn(ExperimentalAnimationApi::class)
+fun NavGraphBuilder.addTaskDetailScreen(
+    navController: NavController,
+) {
+    composable(
+        route = "${Screens.TaskDetail.route}/{id}/{isEditing}",
+        arguments = Screens.TaskDetail.arguments,
+        enterTransition = {
+            slideIntoContainer(
+                towards = AnimatedContentScope.SlideDirection.Start,
+                animationSpec = tween(700)
+            )
+        },
+        popExitTransition = {
+            slideOutOfContainer(
+                towards = AnimatedContentScope.SlideDirection.End,
+                animationSpec = tween(700)
+            )
+        }
+    ) {
+
+    }
+}
+
+@OptIn(ExperimentalAnimationApi::class)
+fun NavGraphBuilder.addReminderDetailScreen(
+    navController: NavController,
+) {
+    composable(
+        route = "${Screens.ReminderDetail.route}/{id}/{isEditing}",
+        arguments = Screens.ReminderDetail.arguments,
+        enterTransition = {
+            slideIntoContainer(
+                towards = AnimatedContentScope.SlideDirection.Start,
+                animationSpec = tween(700)
+            )
+        },
+        popExitTransition = {
+            slideOutOfContainer(
+                towards = AnimatedContentScope.SlideDirection.End,
+                animationSpec = tween(700)
+            )
+        }
+    ) {
+
     }
 }

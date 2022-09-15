@@ -6,6 +6,8 @@ sealed class AgendaListEvents {
 
     object OnDismissSnackbar : AgendaListEvents()
 
+    object OnRefresh : AgendaListEvents()
+
     data class UpdateInitialDate(
         val date: LocalDate,
     ) : AgendaListEvents()

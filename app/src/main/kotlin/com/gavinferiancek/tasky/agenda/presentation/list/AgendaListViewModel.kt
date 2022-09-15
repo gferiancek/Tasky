@@ -27,10 +27,7 @@ class AgendaListViewModel @Inject constructor(
         private set
 
     init {
-        getAgenda(
-            timestamp = System.currentTimeMillis(),
-            date = state.selectedDay
-        )
+        getAgenda(date = state.selectedDay)
         state = state.copy(
             dayList = dateManager.generateDayList(state.initialDate),
             listHeader = generateListHeader(state.initialDate),
@@ -38,14 +35,12 @@ class AgendaListViewModel @Inject constructor(
     }
 
     fun onTriggerEvent(event: AgendaListEvents) {
-        state = when (event) {
-            is AgendaListEvents.OnDismissSnackbar -> state.copy(infoMessage = null)
+        when (event) {
+            is AgendaListEvents.OnDismissSnackbar -> state = state.copy(infoMessage = null)
+            is AgendaListEvents.OnRefresh -> getAgenda(date = state.selectedDay)
             is AgendaListEvents.UpdateInitialDate -> {
-                getAgenda(
-                    timestamp = dateManager.localDateToMillis(event.date),
-                    date = event.date,
-                )
-                state.copy(
+                getAgenda(date = event.date)
+                state = state.copy(
                     initialDate = event.date,
                     dayList = dateManager.generateDayList(event.date),
                     listHeader = generateListHeader(event.date),
@@ -53,11 +48,8 @@ class AgendaListViewModel @Inject constructor(
                 )
             }
             is AgendaListEvents.UpdateSelectedDay -> {
-                getAgenda(
-                    timestamp = dateManager.localDateToMillis(event.day),
-                    date = event.day,
-                )
-                state.copy(
+                getAgenda(date = event.day)
+                state = state.copy(
                     listHeader = generateListHeader(event.day),
                     selectedDay = event.day,
                 )
@@ -80,12 +72,9 @@ class AgendaListViewModel @Inject constructor(
         }
     }
 
-    private fun getAgenda(
-        timestamp: Long,
-        date: LocalDate,
-    ) {
+    private fun getAgenda(date: LocalDate) {
         getAgendaFromCache(date = date)
-        fetchAgenda(timestamp = timestamp)
+        fetchAgenda(timestamp = dateManager.localDateToMillis(date))
     }
 
     private fun fetchAgenda(timestamp: Long) {

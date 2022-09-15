@@ -3,6 +3,10 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Tasky/app/src/main/res/drawable/baseline_event_note_48.xml" value="0.1" />
+        <entry key="..\:/Tasky/app/src/main/res/drawable/ic_arrow_back_ios_new_24.xml" value="0.1" />
+        <entry key="..\:/Tasky/app/src/main/res/drawable/ic_baseline_circle_24.xml" value="0.1" />
+        <entry key="..\:/Tasky/app/src/main/res/drawable/ic_baseline_more_horiz_24.xml" value="0.1" />
         <entry key="..\:/Tasky/app/src/main/res/drawable/ic_launcher_background.xml" value="0.199" />
         <entry key="..\:/Tasky/app/src/main/res/drawable/ic_tasky_logo.xml" value="0.234" />
         <entry key="..\:/Tasky/feat-login/login-presentation/src/main/res/drawable/ic_baseline_visibility_24.xml" value="0.114" />

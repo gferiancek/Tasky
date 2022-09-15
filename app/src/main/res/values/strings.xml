@@ -26,11 +26,20 @@
     <string name="register_button">GET STARTED</string>
     <string name="register_header">Create Your Account</string>
 
-    <!-- Agenda -->
+    <!-- AgendaList -->
     <string name="date_yesterday">Yesterday</string>
     <string name="date_today">Today</string>
     <string name="date_tomorrow">Tomorrow</string>
     <string name="header_dropdown_content_description">Displays dialog to pick a new date</string>
     <string name="empty_text">No agenda exists for today.\nTry adding an Event, Reminder, or Task by clicking \"+\"</string>
-
+    <string name="action_logout">Logout</string>
+    <string name="action_event">Event</string>
+    <string name="action_task">Task</string>
+    <string name="action_reminder">Reminder</string>
+    <string name="agenda_list_fab_content_description">Button used to add a new item to your agenda.</string>
+    <string name="list_item_menu_content_description">Button providing access to context actions for this item</string>
+    <string name="action_open">Open</string>
+    <string name="action_edit">Edit</string>
+    <string name="action_delete">Delete</string>
+    <string name="is_done_toggle_content_description">Toggles whether or not the task is completed.</string>
 </resources>

@@ -7,6 +7,7 @@ buildscript {
         okhttp3_version = "5.0.0-alpha.10"
         material_dialogs_version = "0.8.1-rc"
         room_version = '2.4.3'
+        accompanist_version = '0.25.1'
     }
 
     dependencies {

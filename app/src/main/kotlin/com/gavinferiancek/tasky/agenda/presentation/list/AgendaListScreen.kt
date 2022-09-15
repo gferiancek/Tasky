@@ -2,10 +2,9 @@ package com.gavinferiancek.tasky.agenda.presentation.list
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.ScaffoldState
 import androidx.compose.material.Text
+import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.gavinferiancek.tasky.R
@@ -13,17 +12,18 @@ import com.gavinferiancek.tasky.agenda.presentation.components.list.AgendaHeader
 import com.gavinferiancek.tasky.agenda.presentation.components.list.AgendaList
 import com.gavinferiancek.tasky.agenda.presentation.components.list.DaySelector
 import com.gavinferiancek.tasky.core.presentation.components.CardLayout
-import com.gavinferiancek.tasky.core.presentation.components.CircularIndeterminateProgressBar
 import com.gavinferiancek.tasky.core.presentation.components.showSnackbar
 import com.gavinferiancek.tasky.core.presentation.theme.LocalSpacing
+import com.google.accompanist.swiperefresh.SwipeRefresh
+import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 
 @Composable
 fun AgendaScreen(
     state: AgendaListState,
-    scaffoldState: ScaffoldState,
     events: (AgendaListEvents) -> Unit,
 ) {
     val spacing = LocalSpacing.current
+    val scaffoldState = rememberScaffoldState()
 
     CardLayout(
         header = {
@@ -52,11 +52,10 @@ fun AgendaScreen(
         )
         Spacer(modifier = Modifier.height(spacing.medium))
 
-        Box(
-            modifier = Modifier.fillMaxSize(),
-            contentAlignment = Alignment.TopCenter,
+        SwipeRefresh(
+            state = rememberSwipeRefreshState(isRefreshing = state.isLoading),
+            onRefresh = { events(AgendaListEvents.OnRefresh) }
         ) {
-            if (state.isLoading) CircularIndeterminateProgressBar(modifier = Modifier.fillMaxWidth())
             AgendaList(
                 pastItems = state.pastItems,
                 futureItems = state.futureItems,
