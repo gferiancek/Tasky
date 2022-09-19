@@ -1,13 +1,14 @@
 package com.gavinferiancek.tasky.core.domain.preferences
 
+import com.gavinferiancek.tasky.core.domain.User
 import kotlinx.coroutines.flow.Flow
 
 interface UserPreferences {
-    fun getToken(): String
-
     fun editToken(token: String)
 
-    fun getName(): String
-
     fun editName(name: String)
+
+    fun editId(id: String)
+
+    fun getUser(): User
 }

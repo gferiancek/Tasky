@@ -7,8 +7,15 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.gavinferiancek.tasky.R
 import com.gavinferiancek.tasky.agenda.domain.datetime.DateTimeManager
+import com.gavinferiancek.tasky.agenda.domain.model.AgendaItem
+import com.gavinferiancek.tasky.agenda.domain.model.Event
+import com.gavinferiancek.tasky.agenda.domain.model.Reminder
+import com.gavinferiancek.tasky.agenda.domain.model.Task
 import com.gavinferiancek.tasky.agenda.domain.repository.AgendaRepository
 import com.gavinferiancek.tasky.core.data.remote.error.getUiText
+import com.gavinferiancek.tasky.core.domain.User
+import com.gavinferiancek.tasky.core.domain.getInitials
+import com.gavinferiancek.tasky.core.domain.preferences.UserPreferences
 import com.gavinferiancek.tasky.core.util.UiText
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
@@ -22,17 +29,12 @@ import javax.inject.Inject
 class AgendaListViewModel @Inject constructor(
     private val dateManager: DateTimeManager,
     private val repository: AgendaRepository,
+    userPreferences: UserPreferences,
 ) : ViewModel() {
-    var state by mutableStateOf(AgendaListState())
+    var state by mutableStateOf(AgendaListState(name = userPreferences.getUser().getInitials()))
         private set
 
-    init {
-        getAgenda(date = state.selectedDay)
-        state = state.copy(
-            dayList = dateManager.generateDayList(state.initialDate),
-            listHeader = generateListHeader(state.initialDate),
-        )
-    }
+    init { getAgenda(date = state.selectedDay) }
 
     fun onTriggerEvent(event: AgendaListEvents) {
         when (event) {
@@ -54,6 +56,8 @@ class AgendaListViewModel @Inject constructor(
                     selectedDay = event.day,
                 )
             }
+            is AgendaListEvents.UpdateTask -> updateTask(task = event.task)
+            is AgendaListEvents.DeleteAgendaItem -> deleteAgendaItem(item = event.item)
         }
     }
 
@@ -98,5 +102,47 @@ class AgendaListViewModel @Inject constructor(
                 futureItems = groupedItems.getOrDefault("futureItems", listOf()),
             )
         }.launchIn(viewModelScope)
+    }
+
+    private fun updateTask(task: Task) {
+        viewModelScope.launch {
+            repository.updateTask(task)
+                .onFailure { e ->
+                    state = state.copy(
+                        infoMessage = e.getUiText()
+                    )
+                }
+        }
+    }
+
+    private fun deleteAgendaItem(item: AgendaItem) {
+        viewModelScope.launch {
+            when (item) {
+                is Event -> {
+                    repository.deleteEvent(id = item.id)
+                        .onFailure { e ->
+                            state = state.copy(
+                                infoMessage = e.getUiText()
+                            )
+                        }
+                }
+                is Task -> {
+                    repository.deleteTask(id = item.id)
+                        .onFailure { e ->
+                            state = state.copy(
+                                infoMessage = e.getUiText()
+                            )
+                        }
+                }
+                is Reminder -> {
+                    repository.deleteReminder(id = item.id)
+                        .onFailure { e ->
+                            state = state.copy(
+                                infoMessage = e.getUiText()
+                            )
+                        }
+                }
+            }
+        }
     }
 }

@@ -6,6 +6,7 @@ import com.gavinferiancek.tasky.auth.data.remote.register.RegisterRequestDto
 import com.gavinferiancek.tasky.auth.domain.repository.AuthRepository
 import com.gavinferiancek.tasky.core.domain.preferences.UserPreferences
 import retrofit2.HttpException
+import java.io.IOException
 import java.util.concurrent.CancellationException
 
 class AuthRepositoryImpl(
@@ -18,14 +19,15 @@ class AuthRepositoryImpl(
         password: String,
     ): Result<Unit> {
         return try {
-            val authorizedUser = authApi.loginUser(
+            val user = authApi.loginUser(
                 loginRequest = LoginRequestDto(
                     email = email,
                     password = password,
                 )
             )
-            userPreferences.editToken(token = authorizedUser.token)
-            userPreferences.editName(name = authorizedUser.fullName)
+            userPreferences.editToken(token = user.token)
+            userPreferences.editName(name = user.fullName)
+            userPreferences.editId(id = user.userId)
             Result.success(Unit)
         } catch (e: Exception) {
             if (e is CancellationException) throw e
@@ -65,6 +67,21 @@ class AuthRepositoryImpl(
                 if (e is HttpException && e.code() == 401) userPreferences.editToken("")
                 Result.failure(e)
             }
+        }
+    }
+
+    override suspend fun logoutUser() {
+        try {
+            authApi.logoutUser()
+        }
+        // Nothing to do with these exceptions, but they're caught to prevent the app from crashing.
+        // (Imagine hitting logout in airplane mode and having the app crash instead of logging out.)
+        catch (e: HttpException) {
+        } catch (e: IOException) {
+        } finally {
+            userPreferences.editName(name = "")
+            userPreferences.editToken(token ="")
+            userPreferences.editId(id = "")
         }
     }
 }

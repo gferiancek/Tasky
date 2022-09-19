@@ -13,7 +13,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
-    repository: AuthRepository,
+    val repository: AuthRepository,
 ) : ViewModel() {
 
     var state by mutableStateOf(MainState())
@@ -25,6 +25,12 @@ class MainViewModel @Inject constructor(
             repository.authenticateToken()
                 .onSuccess { state = state.copy(startDestination = Screens.AgendaList.route) }
             state = state.copy(isLoading = false)
+        }
+    }
+
+    fun logoutUser() {
+        viewModelScope.launch {
+            repository.logoutUser()
         }
     }
 }

@@ -14,4 +14,6 @@ interface AuthRepository {
     ): Result<Unit>
 
     suspend fun authenticateToken(): Result<Unit>
+
+    suspend fun logoutUser()
 }

@@ -8,7 +8,7 @@ import okhttp3.Response
 class AuthorizationInterceptor(private val userPreferences: UserPreferences): Interceptor {
 
     override fun intercept(chain: Interceptor.Chain): Response {
-        val token = userPreferences.getToken()
+        val token = userPreferences.getUser().token
         val request = chain.request().newBuilder()
             .addHeader("x-api-key", BuildConfig.API_KEY)
             .addHeader("Authorization", "Bearer $token")

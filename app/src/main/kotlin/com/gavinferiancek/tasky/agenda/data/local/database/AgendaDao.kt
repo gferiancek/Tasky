@@ -13,6 +13,9 @@ interface AgendaDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertTasks(tasks: List<TaskEntity>)
 
+    @Query("DELETE FROM tasks WHERE id = :id")
+    suspend fun deleteTask(id: String)
+
     @Query("SELECT * FROM tasks WHERE start_time BETWEEN :startTime AND :endTime")
     fun getTasksForDate(startTime: Long, endTime: Long): Flow<List<TaskEntity>>
 
@@ -21,6 +24,9 @@ interface AgendaDao {
      */
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertReminders(reminders: List<ReminderEntity>)
+
+    @Query("DELETE FROM reminders WHERE id = :id")
+    suspend fun deleteReminder(id: String)
 
     @Query("SELECT * FROM reminders WHERE start_time BETWEEN :startTime AND :endTime")
     fun getRemindersForDate(startTime: Long, endTime: Long): Flow<List<ReminderEntity>>
@@ -41,6 +47,9 @@ interface AgendaDao {
             }
         }
     }
+
+    @Query("DELETE FROM events WHERE id = :id")
+    suspend fun deleteEvent(id: String)
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertAttendee(attendee: AttendeeEntity): Long
