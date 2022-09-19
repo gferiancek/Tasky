@@ -195,6 +195,27 @@ fun NavGraphBuilder.addAgendaScreen(
         AgendaScreen(
             state = viewModel.state,
             events = viewModel::onTriggerEvent,
+            onLogout = onLogout,
+            onNavigateToLogin = {
+                navController.navigate(Screens.Login.route) {
+                    popUpTo(Screens.AgendaList.route) { inclusive = true }
+                }
+            },
+            onNavigateToEventDetail = { navOptions ->
+                navController.navigate(
+                    "${Screens.EventDetail.route}/${navOptions.id}/${navOptions.isEditing}"
+                )
+            },
+            onNavigateToTaskDetail = { navOptions ->
+                navController.navigate(
+                    "${Screens.TaskDetail.route}/${navOptions.id}/${navOptions.isEditing}"
+                )
+            },
+            onNavigateToReminderDetail = { navOptions ->
+                navController.navigate(
+                    "${Screens.ReminderDetail.route}/${navOptions.id}/${navOptions.isEditing}"
+                )
+            },
         )
     }
 }

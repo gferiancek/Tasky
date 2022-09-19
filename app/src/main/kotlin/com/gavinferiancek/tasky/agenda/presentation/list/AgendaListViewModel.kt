@@ -13,6 +13,8 @@ import com.gavinferiancek.tasky.agenda.domain.model.Reminder
 import com.gavinferiancek.tasky.agenda.domain.model.Task
 import com.gavinferiancek.tasky.agenda.domain.repository.AgendaRepository
 import com.gavinferiancek.tasky.core.data.remote.error.getUiText
+import com.gavinferiancek.tasky.core.domain.User
+import com.gavinferiancek.tasky.core.domain.getInitials
 import com.gavinferiancek.tasky.core.domain.preferences.UserPreferences
 import com.gavinferiancek.tasky.core.util.UiText
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -29,17 +31,10 @@ class AgendaListViewModel @Inject constructor(
     private val repository: AgendaRepository,
     userPreferences: UserPreferences,
 ) : ViewModel() {
-    var state by mutableStateOf(AgendaListState())
+    var state by mutableStateOf(AgendaListState(name = userPreferences.getUser().getInitials()))
         private set
 
-    init {
-        getAgenda(date = state.selectedDay)
-        state = state.copy(
-            dayList = dateManager.generateDayList(state.initialDate),
-            listHeader = generateListHeader(state.initialDate),
-            name = formatUserName(userPreferences.getName())
-        )
-    }
+    init { getAgenda(date = state.selectedDay) }
 
     fun onTriggerEvent(event: AgendaListEvents) {
         when (event) {
@@ -78,14 +73,6 @@ class AgendaListViewModel @Inject constructor(
                 val formatter = DateTimeFormatter.ofPattern("E d, u")
                 UiText.DynamicString(selectedDay.format(formatter))
             }
-        }
-    }
-
-    private fun formatUserName(fullName: String): String {
-        val splitName = fullName.split(" ")
-        return when (splitName.count()) {
-            1 -> splitName[0].substring(0, 2).uppercase()
-            else -> "${splitName[0][0]}${splitName[1][0]}".uppercase()
         }
     }
 
