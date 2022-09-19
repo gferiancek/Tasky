@@ -37,7 +37,7 @@ fun ReminderItem(
         backgroundColor = LightGray,
         contentColor = MaterialTheme.colors.onSurface,
         description = description,
-        timestamp = timestamp,
+        formattedTime = timestamp,
         title = {
             Row(
                 modifier = Modifier.fillMaxWidth(0.9f),

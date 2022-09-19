@@ -1,6 +1,9 @@
 package com.gavinferiancek.tasky.agenda.presentation.list
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
@@ -83,7 +86,7 @@ fun AgendaScreen(
                     modifier = Modifier.fillMaxSize(),
                     pastItems = state.pastItems,
                     futureItems = state.futureItems,
-                    onToggleIsDone = { task ->
+                    setIsDone = { task ->
                         events(AgendaListEvents.UpdateTask(task))
                     },
                     onNavigateToEventDetail = onNavigateToEventDetail,

@@ -4,8 +4,10 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.res.stringResource
 import com.gavinferiancek.tasky.R
 import com.gavinferiancek.tasky.agenda.domain.NavigationOptions
@@ -23,19 +25,19 @@ fun AgendaListFab(
     onNavigateToTaskDetail: (NavigationOptions) -> Unit,
     onNavigateToReminderDetail: (NavigationOptions) -> Unit,
 ) {
-    val isExpanded = remember { mutableStateOf(false) }
+    var isExpanded by rememberSaveable { mutableStateOf(false) }
     FloatingActionButton(
-        onClick = { isExpanded.value = true },
+        onClick = { isExpanded = true },
         shape = MaterialTheme.shapes.medium,
         backgroundColor = MaterialTheme.colors.primary,
     ) {
         DropdownMenu(
-            expanded = isExpanded.value,
-            onDismissRequest = { isExpanded.value = false }
+            expanded = isExpanded,
+            onDismissRequest = { isExpanded = false }
         ) {
             DropdownMenuItem(
                 onClick = {
-                    isExpanded.value = false
+                    isExpanded = false
                     onNavigateToEventDetail(
                         NavigationOptions(
                             id = null,
@@ -47,7 +49,7 @@ fun AgendaListFab(
             )
             DropdownMenuItem(
                 onClick = {
-                    isExpanded.value = false
+                    isExpanded = false
                     onNavigateToTaskDetail(
                         NavigationOptions(
                             id = null,
@@ -59,7 +61,7 @@ fun AgendaListFab(
             )
             DropdownMenuItem(
                 onClick = {
-                    isExpanded.value = false
+                    isExpanded = false
                     onNavigateToReminderDetail(
                         NavigationOptions(
                             id = null,

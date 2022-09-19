@@ -15,7 +15,7 @@ import java.time.format.DateTimeFormatter
  * @param modifier Modifier passed to [EventItem]/[TaskItem]/[ReminderItem]
  * @param item [AgendaItem] containing the data for the item to be composed.
  * @param formatter [DateTimeFormatter] used to format startTime and endTimes.
- * @param onToggleIsDone Lambda to pass Task back to VM with a toggled isDone state.
+ * @param setIsDone Lambda to pass Task back to VM with a toggled isDone state.
  * @param onNavigateToEventDetail Lambda used to navigate to the Event detail screen with supplied NavigationOptions.
  * @param onNavigateToTaskDetail Lambda used to navigate to the Task detail screen with supplied NavigationOptions.
  * @param onNavigateToReminderDetail Lambda used to navigate to the Reminder detail screen with supplied NavigationOptions.
@@ -26,7 +26,7 @@ fun AgendaListItem(
     modifier: Modifier = Modifier,
     item: AgendaItem,
     formatter: DateTimeFormatter,
-    onToggleIsDone: (Task) -> Unit,
+    setIsDone: (Task) -> Unit,
     onNavigateToEventDetail: (NavigationOptions) -> Unit,
     onNavigateToTaskDetail: (NavigationOptions) -> Unit,
     onNavigateToReminderDetail: (NavigationOptions) -> Unit,
@@ -67,7 +67,7 @@ fun AgendaListItem(
                 description = item.description,
                 timestamp = remember(item.startTime) { item.startTime.format(formatter) },
                 isDone = item.isDone,
-                onToggleIsDone = { onToggleIsDone(item.copy(isDone = !item.isDone)) },
+                setIsDone = { setIsDone(item.copy(isDone = !item.isDone)) },
                 onOpen = {
                     onNavigateToTaskDetail(
                         NavigationOptions(

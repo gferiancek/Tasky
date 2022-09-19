@@ -3,8 +3,10 @@ package com.gavinferiancek.tasky.agenda.presentation.components.list.item
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
@@ -25,8 +27,8 @@ fun CardMenuButton(
     onEdit: () -> Unit,
     onDelete: () -> Unit,
 ) {
-    val isExpanded = remember { mutableStateOf(false) }
-    IconButton(onClick = { isExpanded.value = true }) {
+    var isExpanded by rememberSaveable { mutableStateOf(false) }
+    IconButton(onClick = { isExpanded = true }) {
         Icon(
             modifier = Modifier
                 .clip(CircleShape),
@@ -34,14 +36,14 @@ fun CardMenuButton(
             contentDescription = stringResource(id = R.string.list_item_menu_content_description),
         )
         DropdownMenu(
-            expanded = isExpanded.value,
+            expanded = isExpanded,
             onDismissRequest = {
-                isExpanded.value = false
+                isExpanded = false
             }
         ) {
             DropdownMenuItem(
                 onClick = {
-                    isExpanded.value = false
+                    isExpanded = false
                     onOpen()
                 },
                 content = { Text(stringResource(id = R.string.action_open)) },
@@ -52,7 +54,7 @@ fun CardMenuButton(
             )
             DropdownMenuItem(
                 onClick = {
-                    isExpanded.value = false
+                    isExpanded = false
                     onEdit()
                 },
                 content = { Text(text = stringResource(id = R.string.action_edit)) },
@@ -63,7 +65,7 @@ fun CardMenuButton(
             )
             DropdownMenuItem(
                 onClick = {
-                    isExpanded.value = false
+                    isExpanded = false
                     onDelete()
                 },
                 content = { Text(text = stringResource(id = R.string.action_delete)) },

@@ -24,7 +24,7 @@ import java.time.format.DateTimeFormatter
  * @param modifier Modifier applied to LazyColumn.
  * @param pastItems [List]<[AgendaItem]> that contains a startTime before the current time.
  * @param futureItems [List]<[AgendaItem]> that contains a startTime after the current time.
- * @param onToggleIsDone Lambda to pass [Task] back to VM after toggling the isDone value.
+ * @param setIsDone Lambda to pass [Task] back to VM after toggling the isDone value.
  * @param onDelete Lambda to pass AgendaItem back to VM after clicking on it's Delete action.
  * @param onNavigateToEventDetail Lambda used to navigate to the Event detail screen with supplied NavigationOptions.
  * @param onNavigateToTaskDetail Lambda used to navigate to the Task detail screen with supplied NavigationOptions.
@@ -37,7 +37,7 @@ fun AgendaList(
     modifier: Modifier = Modifier,
     pastItems: List<AgendaItem>,
     futureItems: List<AgendaItem>,
-    onToggleIsDone: (Task) -> Unit,
+    setIsDone: (Task) -> Unit,
     onDelete: (AgendaItem) -> Unit,
     onNavigateToEventDetail: (NavigationOptions) -> Unit,
     onNavigateToTaskDetail: (NavigationOptions) -> Unit,
@@ -64,8 +64,8 @@ fun AgendaList(
                                 .animateItemPlacement(),
                             item = item,
                             formatter = dateFormatter,
-                            onToggleIsDone = { task ->
-                                onToggleIsDone(task)
+                            setIsDone = { task ->
+                                setIsDone(task)
                             },
                             onNavigateToEventDetail = onNavigateToEventDetail,
                             onNavigateToTaskDetail = onNavigateToTaskDetail,
@@ -95,8 +95,8 @@ fun AgendaList(
                                 .animateItemPlacement(),
                             item = item,
                             formatter = dateFormatter,
-                            onToggleIsDone = { task ->
-                                onToggleIsDone(task)
+                            setIsDone = { task ->
+                                setIsDone(task)
                             },
                             onNavigateToEventDetail = onNavigateToEventDetail,
                             onNavigateToTaskDetail = onNavigateToTaskDetail,

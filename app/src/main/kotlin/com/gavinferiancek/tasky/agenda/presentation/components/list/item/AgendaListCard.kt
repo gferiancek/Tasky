@@ -18,7 +18,7 @@ import com.gavinferiancek.tasky.core.presentation.theme.LocalSpacing
  * @param backgroundColor [Color] to apply to [Card] backgroundColor param.
  * @param contentColor [Color] to apply to content inside the [Card] composable.
  * @param description [String] used in [Card] body
- * @param timestamp [String] displayed at bottom of card.
+ * @param formattedTime [String] displayed at bottom of card.
  * @param title Slot for Composable displayed in the top row of the [Card]
  * @param onOpen Lambda for [CardMenuButton]'s Open action as well as the [Card]'s onClick action.
  * @param onEdit Lambda for [CardMenuButton]'s Edit action
@@ -30,7 +30,7 @@ fun AgendaListCard(
     backgroundColor: Color,
     contentColor: Color,
     description: String,
-    timestamp: String,
+    formattedTime: String,
     title: @Composable () -> Unit,
     onOpen: () -> Unit,
     onEdit: () -> Unit,
@@ -75,7 +75,7 @@ fun AgendaListCard(
 
             Text(
                 modifier = Modifier.fillMaxWidth(),
-                text = timestamp,
+                text = formattedTime,
                 style = MaterialTheme.typography.body1,
                 textAlign = TextAlign.End,
             )
