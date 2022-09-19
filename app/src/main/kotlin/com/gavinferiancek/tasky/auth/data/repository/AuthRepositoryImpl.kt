@@ -19,14 +19,15 @@ class AuthRepositoryImpl(
         password: String,
     ): Result<Unit> {
         return try {
-            val authorizedUser = authApi.loginUser(
+            val user = authApi.loginUser(
                 loginRequest = LoginRequestDto(
                     email = email,
                     password = password,
                 )
             )
-            userPreferences.editToken(token = authorizedUser.token)
-            userPreferences.editName(name = authorizedUser.fullName)
+            userPreferences.editToken(token = user.token)
+            userPreferences.editName(name = user.fullName)
+            userPreferences.editId(id = user.userId)
             Result.success(Unit)
         } catch (e: Exception) {
             if (e is CancellationException) throw e
@@ -78,8 +79,9 @@ class AuthRepositoryImpl(
         catch (e: HttpException) {
         } catch (e: IOException) {
         } finally {
-            userPreferences.editName("")
-            userPreferences.editToken("")
+            userPreferences.editName(name = "")
+            userPreferences.editToken(token ="")
+            userPreferences.editId(id = "")
         }
     }
 }

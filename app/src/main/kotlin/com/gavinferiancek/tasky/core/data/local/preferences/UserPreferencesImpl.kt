@@ -3,6 +3,7 @@ package com.gavinferiancek.tasky.core.data.local.preferences
 import android.content.Context
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKey
+import com.gavinferiancek.tasky.core.domain.User
 import com.gavinferiancek.tasky.core.domain.preferences.UserPreferences
 
 class UserPreferencesImpl(
@@ -20,10 +21,6 @@ class UserPreferencesImpl(
         EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
     )
 
-    override fun getToken(): String {
-        return userPreferences.getString("token", null)?: ""
-    }
-
     override fun editToken(token: String) {
         userPreferences
             .edit()
@@ -31,14 +28,25 @@ class UserPreferencesImpl(
             .apply()
     }
 
-    override fun getName(): String {
-        return userPreferences.getString("name", null)?: ""
-    }
-
     override fun editName(name: String) {
         userPreferences
             .edit()
             .putString("name", name)
             .apply()
+    }
+
+    override fun editId(id: String) {
+        userPreferences
+            .edit()
+            .putString("id", id)
+            .apply()
+    }
+
+    override fun getUser(): User {
+        return User(
+            token = userPreferences.getString("token", null)?: "",
+            name = userPreferences.getString("name", null)?: "",
+            id = userPreferences.getString("id", null)?: "",
+        )
     }
 }
