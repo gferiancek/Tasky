@@ -26,12 +26,12 @@ data class Event(
 ) : AgendaItem()
 
 data class Task(
-    override val id: String,
-    override val title: String,
-    override val description: String,
-    override val startTime: ZonedDateTime,
-    override val remindAt: ZonedDateTime,
-    val isDone: Boolean
+    override val id: String = "",
+    override val title: String = "",
+    override val description: String = "",
+    override val startTime: ZonedDateTime = ZonedDateTime.now(),
+    override val remindAt: ZonedDateTime = ZonedDateTime.now(),
+    val isDone: Boolean = false,
 ) : AgendaItem()
 
 fun Task.toTaskRequestDto(): TaskRequestDto {

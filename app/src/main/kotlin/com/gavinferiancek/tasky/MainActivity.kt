@@ -14,6 +14,8 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
+import com.gavinferiancek.tasky.agenda.presentation.detail.task.TaskDetailScreen
+import com.gavinferiancek.tasky.agenda.presentation.detail.task.TaskDetailViewModel
 import com.gavinferiancek.tasky.agenda.presentation.list.AgendaListViewModel
 import com.gavinferiancek.tasky.agenda.presentation.list.AgendaScreen
 import com.gavinferiancek.tasky.auth.presentation.login.LoginScreen
@@ -68,6 +70,7 @@ class MainActivity : ComponentActivity() {
                             )
                             addTaskDetailScreen(
                                 navController = navController,
+                                scaffoldState = scaffoldState,
                             )
                             addReminderDetailScreen(
                                 navController = navController,
@@ -252,6 +255,7 @@ fun NavGraphBuilder.addEventDetailScreen(
 @OptIn(ExperimentalAnimationApi::class)
 fun NavGraphBuilder.addTaskDetailScreen(
     navController: NavController,
+    scaffoldState: ScaffoldState,
 ) {
     composable(
         route = "${Screens.TaskDetail.route}/{id}/{isEditing}",
@@ -269,6 +273,13 @@ fun NavGraphBuilder.addTaskDetailScreen(
             )
         }
     ) {
+        val viewModel: TaskDetailViewModel = hiltViewModel()
+        TaskDetailScreen(
+            state = viewModel.state,
+            events = viewModel::onTriggerEvent,
+            scaffoldState = scaffoldState,
+            onNavigateUp = { navController.popBackStack() }
+        )
 
     }
 }
